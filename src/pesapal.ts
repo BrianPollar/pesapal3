@@ -1,6 +1,6 @@
-import { PesaPalController } from "./controllers/payment.controller";
+import { PesaPalController } from './controllers/payment.controller';
 
-interface Iconfig {
+export interface Iconfig {
   pesapalEnvironment: string;
   pesapalConsumerKey: string;
   pesapalConsumerSecret: string;
@@ -16,13 +16,12 @@ export class Pesapal {
 
   constructor(config: Iconfig) {
     Pesapal.config = config;
-    if(config.pesapalEnvironment === 'live') {
+    if (config.pesapalEnvironment === 'live') {
       Pesapal.pesapalUrl = 'https://pay.pesapal.com/v3';
     } else {
       Pesapal.pesapalUrl = 'https://cybqa.pesapal.com/pesapalv3';
     }
     this.paymentInstance = new PesaPalController();
-    
   }
 
   run() {

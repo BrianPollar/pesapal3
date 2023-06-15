@@ -6,9 +6,9 @@
   "types": "lib/index.d.ts",
   "type": "commonjs",
   "scripts": {
-    "build": "tsc",
+    "compileLib": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publishGit": "npm publish"
+    "publishLib": "npm publish"
   },
   "keywords": [
     "pesapal",

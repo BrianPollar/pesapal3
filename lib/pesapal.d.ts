@@ -1,5 +1,5 @@
-import { PesaPalController } from "./controllers/payment.controller";
-interface Iconfig {
+import { PesaPalController } from './controllers/payment.controller';
+export interface Iconfig {
     pesapalEnvironment: string;
     pesapalConsumerKey: string;
     pesapalConsumerSecret: string;
@@ -13,4 +13,3 @@ export declare class Pesapal {
     constructor(config: Iconfig);
     run(): PesaPalController;
 }
-export {};
