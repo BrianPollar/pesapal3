@@ -103,6 +103,37 @@ const ordered = await paymentInstance.submitOrder(
 const checkStatus = await paymentInstance.getTransactionStatus(
   "orderTrackingId"
 );
+
+// provide an api ipn notfication call back
+paymentRoutes.get("/ipn", async (req, res) => {
+  const currntUrl = new URL(req.url);
+  // get access to URLSearchParams object
+  const searchParams = currntUrl.searchParams;
+
+  // get url parameters
+  const orderTrackingId = searchParams.get("OrderTrackingId") as string;
+  const orderNotificationType = searchParams.get(
+    "OrderNotificationType"
+  ) as string;
+  const orderMerchantReference = searchParams.get(
+    "OrderMerchantReference"
+  ) as string;
+
+  // make sure you use main pesapal instance and not constrct another one
+
+  if (!paymentInstance && !related) {
+    return res
+      .status(500)
+      .send({ success: false, err: "internal server error" });
+  }
+
+  // return relegatePesaPalNotifications(orderTrackingId, orderNotificationType, orderMerchantReference);
+  const response = await paymentInstance.getTransactionStatus(
+    orderTrackingId,
+    related._id
+  );
+  return response;
+});
 ```
 
 ## Documentation

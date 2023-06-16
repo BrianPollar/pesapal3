@@ -14,6 +14,8 @@ export class PesaPalController {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     'Content-Type': 'application/json'
   };
+  // callbackUrl: string; // main callback url
+  notificationId: string;
 
   constructor() {}
 
