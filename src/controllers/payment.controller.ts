@@ -4,6 +4,30 @@ import { Pesapal } from '../pesapal';
 import axios from 'axios';
 import { getLogger } from 'log4js';
 const logger = getLogger('paymentController');
+import { faker } from '@faker-js/faker';
+
+export const createMockPayDetails = (ipnUrl: string, phone: string) => ({
+  id: faker.string.uuid(),
+  currency: 'UGX',
+  amount: 1000,
+  description: faker.string.alphanumeric(),
+  callback_url: 'http://localhost:4000',
+  notification_id: ipnUrl,
+  billing_address: {
+    email_address: faker.internet.email(),
+    phone_number: phone,
+    country_code: 'UGA',
+    first_name: faker.internet.userName(),
+    middle_name: faker.internet.userName(),
+    last_name: faker.internet.userName(),
+    line_1: faker.string.alphanumeric(),
+    line_2: faker.string.alphanumeric(),
+    city: 'Kampala',
+    state: 'Uganda',
+    postal_code: '0000',
+    zip_code: '0000'
+  }
+});
 
 export class PesaPalController {
   token: IpesaPalToken;
