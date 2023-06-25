@@ -1,7 +1,7 @@
 import { PesaPalController } from './controllers/payment.controller';
 
 export interface Iconfig {
-  pesapalEnvironment: string;
+  pesapalEnvironment: 'sandbox' | 'live';
   pesapalConsumerKey: string;
   pesapalConsumerSecret: string;
   pesapalIpnUrl: string;

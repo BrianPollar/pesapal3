@@ -3,16 +3,15 @@ import { PesaPalController, createMockPayDetails } from '../../../src/controller
 import { IpayDetails } from '../../../src/interfaces/general.interface';
 import { faker } from '@faker-js/faker';
 
-describe('AuthController', () => {
+describe('PaymentController', () => {
   let instance: PesaPalController;
-  let orderTrackingId: string;
+  let orderTrackingId: string | undefined;
 
   beforeEach(() => {
     instance = new PesaPalController();
   });
 
-
-  it('its real instance of AuthController', () => {
+  it('its real instance of PesaPalController', () => {
     expect(instance).toBeInstanceOf(PesaPalController);
   });
 
@@ -21,30 +20,45 @@ describe('AuthController', () => {
     expect(instance.notificationId).toBeUndefined();
   });
 
-
   it('should have props defined', () => {
     expect(instance.ipns).toBeDefined();
+    expect(instance.ipns.length).toBe(0);
     expect(instance.defaultHeaders).toBeDefined();
   });
 
-
-  it('should get token and define token', async() => {
-    expect(await instance.getToken()).toBe(null);
+  it('should get and define token', async() => {
+    const response = await instance.getToken();
+    expect(response).toHaveProperty('success');
+    expect(response.success).toBe(true);
+    expect(response.err).toBeUndefined();
     expect(instance.token).toBeDefined();
   });
 
-  it('check instance hs token defined', () => {
+  it('check instance has token defined', () => {
     expect(instance.hasToken()).toBe(true);
   });
 
+  it('check properly if token has the right date', async() => {
+    const response = await instance.relegateTokenStatus();
+    expect(response).toHaveProperty('success');
+    expect(response).toHaveProperty('madeNewToken');
+    expect(response.success).toBe(true);
+  });
+
   it('should registerIpn and add to ipn list', async() => {
-    expect(await instance.registerIpn()).toBe(null);
+    const response = await instance.registerIpn();
+    expect(response).toHaveProperty('success');
+    expect(response.success).toBe(true);
+    expect(response.err).toBeUndefined();
     expect(instance.ipns[0]).toBeDefined();
     expect(instance.ipns[0]).toHaveProperty('url');
   });
 
-  it('should get getIpnEndPoins', async() => {
-    expect(await instance.getIpnEndPoins()).toBe(null);
+  it('should get getIpnEndPoints', async() => {
+    const response = await instance.getIpnEndPoints();
+    expect(response).toHaveProperty('success');
+    expect(response.success).toBe(true);
+    expect(response.err).toBeUndefined();
     expect(instance.ipns.length).toBeGreaterThan(0);
   });
 
@@ -57,21 +71,26 @@ describe('AuthController', () => {
     expect(res).toHaveProperty('success');
     expect(res).toHaveProperty('status');
     expect(res).toHaveProperty('pesaPalOrderRes');
-    expect((res as any).success).toBe(true);
-    expect((res as any).status).toBe(200);
-    expect((res as any).pesaPalOrderRes).toHaveProperty('order_tracking_id');
-    orderTrackingId = (res as any).pesaPalOrderRes.order_tracking_id;
+    expect(res.success).toBe(true);
+    expect(res.status).toBe(200);
+    expect(res.err).toBeUndefined();
+    expect(res.pesaPalOrderRes).toHaveProperty('order_tracking_id');
+    orderTrackingId = res.pesaPalOrderRes?.order_tracking_id ;
   });
 
   it('should getTransactionStatus with success', async() => {
+    if (!orderTrackingId) {
+      expect(orderTrackingId).toBeDefined();
+      return;
+    }
     const res = await instance.getTransactionStatus(orderTrackingId);
     expect(res).toHaveProperty('success');
     expect(res).toHaveProperty('response');
-    expect((res as any).success).toBe(true);
-    expect((res as any).response).toHaveProperty('payment_method');
-    expect((res as any).response).toHaveProperty('amount');
-    expect((res as any).response).toHaveProperty('created_date');
-    expect((res as any).response).toHaveProperty('confirmation_code');
-    expect((res as any).response).toHaveProperty('payment_status_description');
+    expect(res.success).toBe(true);
+    expect(res.response).toHaveProperty('payment_method');
+    expect(res.response).toHaveProperty('amount');
+    expect(res.response).toHaveProperty('created_date');
+    expect(res.response).toHaveProperty('confirmation_code');
+    expect(res.response).toHaveProperty('payment_status_description');
   });
 });

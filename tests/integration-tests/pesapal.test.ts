@@ -8,11 +8,11 @@ describe('PesaPalController', () => {
 
   beforeEach(() => {
     const config: Iconfig = {
-      pesapalEnvironment: 'string;', // TODO
-      pesapalConsumerKey: 'string;', // TODO
-      pesapalConsumerSecret: 'string;', // TODO
-      pesapalIpnUrl: 'string;', // TODO
-      pesapalCallbackUrl: 'string;'
+      pesapalEnvironment: 'sandbox',
+      pesapalConsumerKey: 'TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev',
+      pesapalConsumerSecret: '1KpqkfsMaihIcOlhnBo/gBZ5smw=',
+      pesapalIpnUrl: 'http://localhost:4000/payment', // TODO
+      pesapalCallbackUrl: 'http://localhost:4000/payment' // TODO
     };
 
     instance = new Pesapal(config);

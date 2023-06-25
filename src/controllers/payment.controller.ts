@@ -6,6 +6,40 @@ import { getLogger } from 'log4js';
 const logger = getLogger('paymentController');
 import { faker } from '@faker-js/faker';
 
+export interface IgetTokenRes {
+  success: boolean;
+  err?;
+}
+
+export interface IregisterIpnRes {
+  success: boolean;
+  err?;
+}
+
+export interface IrelegateTokenStatusRes {
+  success: boolean;
+  madeNewToken: boolean;
+}
+
+export interface IgetIpnEndPointsRes {
+  success: boolean;
+  err?;
+}
+
+export interface IsubmitOrderRes {
+  success: boolean;
+  status?: number;
+  pesaPalOrderRes?: IorderResponse;
+  err?;
+}
+
+export interface IgetTransactionStatusRes {
+  success: boolean;
+  response?: IendpointResponse;
+  status?: string;
+  err?;
+}
+
 export const createMockPayDetails = (ipnUrl: string, phone: string) => ({
   id: faker.string.uuid(),
   currency: 'UGX',
@@ -43,7 +77,7 @@ export class PesaPalController {
 
   constructor() {}
 
-  async getToken() {
+  async getToken(): Promise<IgetTokenRes> {
     const headers = {
       ...this.defaultHeaders
     };
@@ -51,29 +85,28 @@ export class PesaPalController {
       consumer_key: Pesapal.config.pesapalConsumerKey,
       consumer_secret: Pesapal.config.pesapalConsumerSecret
     };
-    logger.error('GETTING TOKEN');
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       axios
         .post(Pesapal.pesapalUrl +
         '/api/Auth/RequestToken',
         parameters,
         { headers })
         .then(res => {
-          const token = res.data as IpesaPalToken;
-          logger.error('GETTING TOKEN 3T5235636', token);
-          if (token.token) {
-            this.token = token;
+          const data = res.data as IpesaPalToken;
+          logger.debug('response data from getToken()', data);
+          if (data.token) {
+            this.token = data;
           // set token to file
           /** fs.writeFileSync(lConfig.
             encryptedDirectory + 'airtltoken', JSON.stringify(token)); */
           } else {
             logger.error('PesaPalController, unknown err', 'sorry but unknwn');
           }
-          resolve(null);
+          resolve({ success: true });
         }).catch((err) => {
           logger.error('PesaPalController, getToken err', err);
-          resolve(null);
+          resolve({ success: false, err });
         });
     });
   }
@@ -82,25 +115,32 @@ export class PesaPalController {
     return Boolean(this.token?.token);
   }
 
-  async relegateTokenStatus() {
-    logger.error('SHIT 111111', this.token);
+  async relegateTokenStatus(): Promise<IrelegateTokenStatusRes> {
+    const response: IrelegateTokenStatusRes = {
+      success: false,
+      madeNewToken: false
+    };
     if (this.hasToken()) {
       const nowDate = new Date();
       const tokenDate = new Date(this.token.expiryDate);
       if (nowDate > tokenDate) {
-        logger.error('SHIT 222222');
         await this.getToken();
+        response.success = true;
+        response.madeNewToken = true;
       } else {
-        logger.error('SHIT 33333333');
-        await this.getToken();
+        // await this.getToken();
+        response.success = true;
+        response.madeNewToken = false;
       }
     } else {
       await this.getToken();
+      response.success = true;
+      response.madeNewToken = false;
     }
-    return true;
+    return response;
   }
 
-  async registerIpn() {
+  async registerIpn(): Promise<IregisterIpnRes> {
     await this.relegateTokenStatus();
 
     const parameters = {
@@ -113,7 +153,7 @@ export class PesaPalController {
       Authorization: 'Bearer  ' + this.token.token
     };
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       axios
         .post(Pesapal.pesapalUrl +
         '/api/URLSetup/RegisterIPN',
@@ -122,32 +162,32 @@ export class PesaPalController {
         .then(res => {
           const response = res.data as IipnResponse;
           this.ipns = [ ...this.ipns, response];
-          resolve(null);
+          resolve({ success: true });
         }).catch((err) => {
           logger.error('PesaPalController, registerIpn err', err);
-          resolve(null);
+          resolve({ success: false, err });
         });
     });
   }
 
-  async getIpnEndPoins() {
+  async getIpnEndPoints(): Promise<IgetIpnEndPointsRes> {
     await this.relegateTokenStatus();
 
     const headers = {
       ...this.defaultHeaders,
       Authorization: 'Bearer  ' + this.token.token
     };
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       axios
         .get(Pesapal.pesapalUrl +
         '/api/URLSetup/GetIpnList',
         { headers })
         .then(res => {
           this.ipns = res.data as IipnResponse[];
-          resolve(null);
+          resolve({ success: true });
         }).catch((err) => {
-          logger.error('PesaPalController, getIpnEndPoins err', err);
-          resolve(null);
+          logger.error('PesaPalController, getIpnEndPoints err', err);
+          resolve({ success: false, err });
         });
     });
   }
@@ -158,7 +198,7 @@ export class PesaPalController {
     id: string | undefined,
     description: string
   ) {
-    console.log('PAYMENT RELATEDS ISSSSS', paymentDetails);
+    logger.debug('constructParamsFromObj, paymentDetails', paymentDetails);
     return {
       id,
       currency: paymentDetails.currency || 'UGA',
@@ -187,7 +227,7 @@ export class PesaPalController {
     paymentDetails: IpayDetails,
     productId: string,
     description: string
-  ) {
+  ): Promise<IsubmitOrderRes> {
     logger.info('details are', paymentDetails);
     await this.relegateTokenStatus();
 
@@ -198,7 +238,7 @@ export class PesaPalController {
 
     const notifId = this.ipns[0].ipn_id;
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       axios
         .post(Pesapal.pesapalUrl +
         '/api/Transactions/SubmitOrderRequest',
@@ -209,12 +249,12 @@ export class PesaPalController {
           resolve({ success: true, status: 200, pesaPalOrderRes: response });
         }).catch((err) => {
           logger.error('PesaPalController, submitOrder err', err);
-          resolve(null);
+          resolve({ success: false, err });
         });
     });
   }
 
-  async getTransactionStatus(orderTrackingId: string) {
+  async getTransactionStatus(orderTrackingId: string): Promise<IgetTransactionStatusRes> {
     await this.relegateTokenStatus();
 
     const headers = {
@@ -238,7 +278,7 @@ export class PesaPalController {
           }
         }).catch((err) => {
           logger.error('PesaPalController, getToken err', err);
-          resolve(null);
+          resolve({ success: false, err });
         });
     });
   }
