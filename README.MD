@@ -1,6 +1,7 @@
 # pesapal3
 
 A nodejs implementation of pesapal payment gateway api.
+A simple library for making payments with PesaPal.
 
 ## Features
 
@@ -28,10 +29,10 @@ import { Pesapal, Iconfig } from "pesapal3";
 
 const config: Iconfig = {
   pesapalEnvironment: "live", // or sandbox
-  pesapalConsumerKey: "string",
-  pesapalConsumerSecret: "string",
-  pesapalIpnUrl: "string",
-  pesapalCallbackUrl: "string",
+  pesapalConsumerKey: "your-consumer-key",
+  pesapalConsumerSecret: "your-consumer-secret",
+  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
 };
 
 const pesapal = new Pesapal(config);
@@ -41,7 +42,10 @@ const paymentInstance = pesapal.run();
 
 // make order
 const details: IpayDetails = {
-  // ...details
+  amount: 1000,
+  currency: "UGX",
+  description: "This is a test payment",
+  // ...other_details
 };
 
 const ordered = await paymentInstance.submitOrder(
@@ -50,11 +54,11 @@ const ordered = await paymentInstance.submitOrder(
   "description"
 );
 
-//check status using the order tracking id provided by pesapal
-
-const checkStatus = await paymentInstance.getTransactionStatus(
-  "orderTrackingId"
-);
+if (ordered.success) {
+  // The make payment request was successful.
+} else {
+  // The make payment request failed.
+}
 ```
 
 ## Installation
@@ -76,10 +80,10 @@ import { Pesapal, Iconfig, IpayDetails } from "pesapal3";
 
 const config: Iconfig = {
   pesapalEnvironment: "live", // or sandbox
-  pesapalConsumerKey: "string",
-  pesapalConsumerSecret: "string",
-  pesapalIpnUrl: "string",
-  pesapalCallbackUrl: "string",
+  pesapalConsumerKey: "your-consumer-key",
+  pesapalConsumerSecret: "your-consumer-secret",
+  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
 };
 
 const pesapal = new Pesapal(config);
@@ -89,7 +93,10 @@ const paymentInstance = pesapal.run();
 
 // make order
 const details: IpayDetails = {
-  // ...details
+  amount: 1000,
+  currency: "UGX",
+  description: "This is a test payment",
+  // ...other_details
 };
 
 const ordered = await paymentInstance.submitOrder(
@@ -97,6 +104,12 @@ const ordered = await paymentInstance.submitOrder(
   "ProductId",
   "description"
 );
+
+if (ordered.success) {
+  // The make payment request was successful.
+} else {
+  // The make payment request failed.
+}
 
 //check status using the order tracking id provided by pesapal
 
@@ -138,7 +151,7 @@ paymentRoutes.get("/ipn", async (req, res) => {
 
 ## Documentation
 
-The source code of the website can be found [here](https://github.com/BrianPollar/pesapal3). Contributions are welcome!
+The full documentation for pesapal3 is available on [here](https://github.com/BrianPollar/pesapal3). Contributions are welcome!
 
 ## Sponsors
 
@@ -146,4 +159,5 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 
 ## License
 
+pesapal3 is licensed under the MIT License.
 [MIT](LICENSE)
