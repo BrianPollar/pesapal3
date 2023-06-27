@@ -2,35 +2,36 @@ import { expect, describe, beforeEach, it } from 'vitest';
 import { PesaPalController, createMockPayDetails } from '../../../src/controllers/payment.controller';
 import { IpayDetails } from '../../../src/interfaces/general.interface';
 import { faker } from '@faker-js/faker';
-import { axiosMock } from 'vitest/axios';
+import axios from 'axios';
+import * as MockAdapter from 'axios-mock-adapter';
+
+const mockAxios = new MockAdapter(axios);
 
 describe('PesaPalControllerPureMock', () => {
   let controller: PesaPalController;
 
   beforeEach(() => {
-    axiosMock.reset();
     controller = new PesaPalController();
   });
 
-  it('should submit the order', async () => {
+  it('should submit the order', async() => {
     const payDetails = createMockPayDetails('http://localhost:4000', '+256775000000');
     const response = {
       orderTrackingId: '1234567890',
       paymentStatus: 'Completed'
     };
-    axiosMock.mockResponse({
-      url: 'https://www.pesapal.com/api/Transactions/SubmitOrderRequest',
-      data: response
-    });
+
+    mockAxios.onPost('https://www.pesapal.com/api/Transactions/SubmitOrderRequest')
+      .reply(200, {
+        data: response
+      });
+
     const res = await controller.submitOrder(payDetails, 'id', 'description');
     expect(res.success).toBe(true);
     expect(res.pesaPalOrderRes?.order_tracking_id).toBe(response.orderTrackingId);
     expect(res.pesaPalOrderRes?.status).toBe(response.paymentStatus);
   });
 });
-
-
-
 
 
 describe('PaymentController', () => {
@@ -124,7 +125,5 @@ describe('PaymentController', () => {
     expect(res.response).toHaveProperty('payment_status_description');
   });
 });
-
-
 
 

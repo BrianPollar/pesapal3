@@ -1,13 +1,16 @@
 import { expect, describe, beforeEach, it } from 'vitest';
 import { Pesapal, Iconfig } from '../../src/pesapal';
 import { PesaPalController } from '../../src/controllers/payment.controller';
-import { axiosMock } from 'vitest/axios';
+import axios from 'axios';
+import * as MockAdapter from 'axios-mock-adapter';
+
+const mockAxios = new MockAdapter(axios);
 
 describe('PesapalPureMock', () => {
   let pesapal: Pesapal;
 
   beforeEach(() => {
-    axiosMock.reset();
+    // axiosMock.reset();
     const config: Iconfig = {
       pesapalEnvironment: 'sandbox',
       pesapalConsumerKey: 'test-consumer-key',
@@ -18,16 +21,17 @@ describe('PesapalPureMock', () => {
     pesapal = new Pesapal(config);
   });
 
-  it('should register the IPN', async () => {
+  it('should register the IPN', () => {
     const response = {
       id: '1234567890',
       status: 'Registered'
     };
-    axiosMock.mockResponse({
-      url: 'https://pay.pesapal.com/v3/ipg/register',
-      data: response
-    });
-    const res = await pesapal.run();
+
+    mockAxios.onPost('https://pay.pesapal.com/v3/ipg/register')
+      .reply(200, {
+        data: response
+      });
+    const res = pesapal.run();
     expect(res).toBeInstanceOf(Pesapal);
   });
 });

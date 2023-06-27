@@ -42,7 +42,7 @@ export class Pesapal {
    */
   static config: Iconfig;
 
-  /** 
+  /**
    * This is a static property that holds the URL for PesaPal.
    * The URL is used to make requests to the PesaPal API.
    */
@@ -64,7 +64,7 @@ export class Pesapal {
     this.paymentInstance = new PesaPalController();
   }
 
-  /** 
+  /**
    * This is a method that is used to run the PesaPal payment gateway.
    * The method returns the instance of the `PesaPalController` class.
    * `this.paymentInstance.registerIpn();`
