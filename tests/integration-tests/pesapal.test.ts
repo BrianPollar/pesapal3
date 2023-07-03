@@ -2,7 +2,7 @@ import { expect, describe, beforeEach, it } from 'vitest';
 import { Pesapal, Iconfig } from '../../src/pesapal';
 import { PesaPalController } from '../../src/controllers/payment.controller';
 import axios from 'axios';
-import * as MockAdapter from 'axios-mock-adapter';
+import MockAdapter from 'axios-mock-adapter';
 
 const mockAxios = new MockAdapter(axios);
 

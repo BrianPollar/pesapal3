@@ -3,7 +3,7 @@ import { PesaPalController, createMockPayDetails } from '../../../src/controller
 import { IpayDetails } from '../../../src/interfaces/general.interface';
 import { faker } from '@faker-js/faker';
 import axios from 'axios';
-import * as MockAdapter from 'axios-mock-adapter';
+import MockAdapter from 'axios-mock-adapter';
 
 const mockAxios = new MockAdapter(axios);
 
