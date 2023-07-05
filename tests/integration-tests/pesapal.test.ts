@@ -1,45 +1,10 @@
-import { expect, describe, beforeEach, it } from 'vitest';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { vi, expect, describe, beforeEach, it } from 'vitest';
 import { Pesapal, Iconfig } from '../../src/pesapal';
 import { PesaPalController } from '../../src/controllers/payment.controller';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-
-const mockAxios = new MockAdapter(axios);
-
-describe('PesapalPureMock', () => {
-  let pesapal: Pesapal;
-
-  beforeEach(() => {
-    // axiosMock.reset();
-    const config: Iconfig = {
-      pesapalEnvironment: 'sandbox',
-      pesapalConsumerKey: 'test-consumer-key',
-      pesapalConsumerSecret: 'test-consumer-secret',
-      pesapalIpnUrl: 'http://localhost:4000/pesapal/ipn',
-      pesapalCallbackUrl: 'http://localhost:4000/pesapal/callback'
-    };
-    pesapal = new Pesapal(config);
-  });
-
-  it('should register the IPN', () => {
-    const response = {
-      id: '1234567890',
-      status: 'Registered'
-    };
-
-    mockAxios.onPost('https://pay.pesapal.com/v3/ipg/register')
-      .reply(200, {
-        data: response
-      });
-    const res = pesapal.run();
-    expect(res).toBeInstanceOf(Pesapal);
-  });
-});
-
 
 describe('PesaPalController', () => {
   let instance: Pesapal;
-  let paymentInstance: PesaPalController;
 
   beforeEach(() => {
     const config: Iconfig = {
@@ -51,14 +16,18 @@ describe('PesaPalController', () => {
     };
 
     instance = new Pesapal(config);
-    paymentInstance = instance.run();
   });
 
   it('its real instance of Pesapal', () => {
     expect(instance).toBeInstanceOf(Pesapal);
   });
 
-  it('its real instance of PesaPalController', () => {
+  it('#run should run Pesapal', () => {
+    // @ts-ignore
+    vi.spyOn(instance.paymentInstance, 'registerIpn').mockImplementationOnce(() => ({ success: true }));
+    const runSpy = vi.spyOn(instance, 'run');
+    const paymentInstance = instance.run();
+    expect(runSpy).toHaveBeenCalled();
     expect(paymentInstance).toBeInstanceOf(PesaPalController);
   });
 });
