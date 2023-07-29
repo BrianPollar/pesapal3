@@ -97,7 +97,8 @@ export interface IgetTransactionStatusRes {
  * * `notification_id`: The notification ID of the pay details.
  * * `billing_address`: The billing address of the payer.
  */
-export const createMockPayDetails = (ipnUrl: string, phone: string) => ({
+export const createMockPayDetails = (
+  ipnUrl: string, phone: string) => ({
   id: faker.string.uuid(),
   currency: 'UGX',
   amount: 1000,
@@ -338,17 +339,21 @@ export class PesaPalController {
  * * `callback_url`: The callback URL of the payment.
  * * `notification_id`: The notification ID of the payment.
  * * `billing_address`: The billing address of the payer.
+ * * `countryCode`: The country code to map country the payment is from.
+ * * `countryCurrency`: The countriesmoney currency.
  */
   constructParamsFromObj(
     paymentDetails: IpayDetails,
     notificationId: string,
     id: string | undefined,
-    description: string
+    description: string,
+    countryCode = 'UG',
+    countryCurrency = 'UGA'
   ) {
     logger.debug('constructParamsFromObj, paymentDetails', paymentDetails);
     return {
       id,
-      currency: paymentDetails.currency || 'UGA',
+      currency: paymentDetails.currency || countryCurrency,
       amount: paymentDetails.amount,
       description,
       callback_url: Pesapal.config.pesapalCallbackUrl + '/' + id,
@@ -356,7 +361,7 @@ export class PesaPalController {
       billing_address: {
         email_address: paymentDetails.billing_address?.email_address,
         phone_number: paymentDetails.billing_address?.phone_number,
-        country_code: 'UG',
+        country_code: countryCode,
         first_name: paymentDetails.billing_address?.first_name,
         middle_name: paymentDetails.billing_address?.middle_name,
         last_name: paymentDetails.billing_address?.last_name,

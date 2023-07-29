@@ -7,7 +7,6 @@
   "type": "commonjs",
   "scripts": {
     "compileLib": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "publishLib": "npm publish",
     "test:vite": "vitest"
   },
@@ -19,8 +18,7 @@
     "payment-gateway"
   ],
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "files": [
     "lib"
