@@ -22,7 +22,7 @@ export interface IpesaPalError {
  * The `message` property is the message of the token.
  */
 export interface IpesaPalToken {
-  token: string;
+  token: string | null;
   expiryDate: string;
   error: string | IpesaPalError;
   status: string;
@@ -31,7 +31,6 @@ export interface IpesaPalToken {
 
 /**
  * This is an interface that defines an IipnResponse.
- *
  * The `url` property is the URL of the IPN.
  * The `created_date` property is the date the IPN was created.
  * The `ipn_id` property is the ID of the IPN.
@@ -39,7 +38,6 @@ export interface IpesaPalToken {
  * The `status` property is the status of the IPN.
  */
 export interface IipnResponse {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   url: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   created_date: string;
@@ -59,7 +57,6 @@ export interface IipnResponse {
  * The `status` property is the status of the IPIN.
  */
 export interface IregisteredIpin {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   url: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   created_date: string;
@@ -161,3 +158,106 @@ export interface IendpointResponse {
   };
   status: string;
 }
+
+/**
+ * Interface representing the response of a refund request completion.
+ */
+export interface IrefundRequestResComplete {
+  success: boolean;
+  err?: string;
+  refundRequestRes?: IrefundRequestRes;
+}
+
+/**
+ * Interface representing a refund request.
+ */
+export interface IrefundRequestReq {
+  confirmation_code: string;
+  amount: string;
+  username: string;
+  remarks: string;
+}
+
+/**
+ * Interface representing the response of a refund request.
+ */
+export interface IrefundRequestRes {
+  status: string;
+  message: string;
+}
+
+/**
+ * This is an interface that defines an IgetTokenRes.
+ *
+ * The `success` property indicates whether the request was successful.
+ * The `err` property is the error, if any.
+ */
+export interface IgetTokenRes {
+  success: boolean;
+  err?;
+}
+
+/**
+ * This is an interface that defines an IregisterIpnRes.
+ *
+ * The `success` property indicates whether the request was successful.
+ * The `err` property is the error, if any.
+ */
+export interface IregisterIpnRes {
+  success: boolean;
+  err?;
+}
+
+/**
+ * This is an interface that defines an IrelegateTokenStatusRes.
+ *
+ * The `success` property indicates whether the request was successful.
+ * The `madeNewToken` property indicates whether a new token was created.
+ */
+export interface IrelegateTokenStatusRes {
+  success: boolean;
+  madeNewToken: boolean;
+}
+
+/**
+ * This is an interface that defines an IgetIpnEndPointsRes.
+ *
+ * The `success` property indicates whether the request was successful.
+ * The `err` property is the error, if any.
+ */
+export interface IgetIpnEndPointsRes {
+  success: boolean;
+  err?;
+}
+
+/**
+ * This is an interface that defines an IsubmitOrderRes.
+ *
+ * The `success` property indicates whether the request was successful.
+ * The `status` property is the status of the order.
+ * The `pesaPalOrderRes` property is the PesaPal order response.
+ * The `err` property is the error, if any.
+ */
+export interface IsubmitOrderRes {
+  success: boolean;
+  status?: number;
+  pesaPalOrderRes?: IorderResponse;
+  err?;
+}
+
+/**
+ * This is an interface that defines an IgetTransactionStatusRes.
+ *
+ * The `success` property indicates whether the request was successful.
+ * The `response` property is the response from PesaPal.
+ * The `status` property is the status of the transaction.
+ * The `err` property is the error, if any.
+ */
+export interface IgetTransactionStatusRes {
+  success: boolean;
+  response?: IendpointResponse;
+  status?: string;
+  err?;
+}
+
+export type TnotificationMethodType = 'GET' | 'POST';

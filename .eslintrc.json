@@ -1,7 +1,8 @@
 {
   "root": true,
   "ignorePatterns": [
-    "projects/**/*"
+    "lib/**/*",
+    "node_modules/**/*"
   ],
   "parserOptions": {
     "ecmaVersion": 2017
@@ -198,6 +199,7 @@
         "plugin:@typescript-eslint/recommended"
       ],
       "rules": {
+        "@typescript-eslint/member-ordering": "error",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/naming-convention": [

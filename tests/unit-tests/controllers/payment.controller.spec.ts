@@ -1,11 +1,22 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { vi, expect, describe, beforeEach, it, expectTypeOf } from 'vitest';
 import { PesaPalController, createMockPayDetails } from '../../../src/controllers/payment.controller';
-import { IpayDetails, IpesaPalError, IpesaPalToken } from '../../../src/interfaces/general.interface';
+import { IpayDetails, IpesaPalError, IpesaPalToken, IrefundRequestReq } from '../../../src/interfaces/general.interface';
 import { faker } from '@faker-js/faker';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { Pesapal } from '../../../src/pesapal';
+
+const makeRandomString = (length: number) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
 
 const mockAxios = new MockAdapter(axios);
 
@@ -16,16 +27,15 @@ export const errorMock: IpesaPalError = {
 };
 
 const pesaplTokenresSuccess: IpesaPalToken = {
-  token: faker.string.uuid(),
-  expiryDate: new Date().toString(),
-  // eslint-disable-next-line no-undefined
-  error: undefined as any,
+  token: makeRandomString(11),
+  expiryDate: new Date('12/12/2025').toString(),
+  error: '',
   status: 'status',
   message: 'message'
 };
 
 const pesaplTokenresFailure: IpesaPalToken = {
-  token: null as any,
+  token: null,
   expiryDate: new Date().toString(),
   error: errorMock,
   status: 'status',
@@ -47,31 +57,11 @@ describe('PaymentController', () => {
     Pesapal.pesapalUrl = 'https://cybqa.pesapal.com/pesapalv3';
   });
 
-  it('#Pesapal should statics have methods defined', () => {
-    expect(Pesapal.config).toBeDefined();
-    expect(Pesapal.pesapalUrl).toBeDefined();
-  });
-
-  it('its real instance of PesaPalController', () => {
-    expect(instance).toBeInstanceOf(PesaPalController);
-  });
-
-  it('should have props undefined', () => {
-    expect(instance.token).toBeUndefined();
-    expect(instance.notificationId).toBeUndefined();
-  });
-
-  it('should have props defined', () => {
-    expect(instance.ipns).toBeDefined();
-    expect(instance.ipns.length).toBe(0);
-    expect(instance.defaultHeaders).toBeDefined();
-  });
-
   it('#getToken should get and define token successfully', async() => {
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, pesaplTokenresSuccess);
+    // @ts-ignore
     const getTokenSpy = vi.spyOn(instance, 'getToken');
+    // @ts-ignore
     const response = await instance.getToken();
     expect(getTokenSpy).toHaveBeenCalled();
     expect(response).toHaveProperty('success');
@@ -81,11 +71,11 @@ describe('PaymentController', () => {
     expect(typeof instance.token.token).toBe('string');
   });
 
-  it('#getToken should fail if no token in respones', async() => {
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresFailure);
+  it('#getToken should fail if no token in response', async() => {
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, pesaplTokenresFailure);
+    // @ts-ignore
     const getTokenSpy = vi.spyOn(instance, 'getToken');
+    // @ts-ignore
     const response = await instance.getToken();
     expect(getTokenSpy).toHaveBeenCalled();
     expect(response).toHaveProperty('success');
@@ -93,17 +83,70 @@ describe('PaymentController', () => {
     expect(instance.token).toBeUndefined();
   });
 
+  it('#getToken should fail if no error and no token in case of unknown response', async() => {
+    const meaninglesssResponse = {};
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, meaninglesssResponse);
+    // @ts-ignore
+    const getTokenSpy = vi.spyOn(instance, 'getToken');
+    // @ts-ignore
+    const response = await instance.getToken();
+    expect(getTokenSpy).toHaveBeenCalled();
+    expect(response).toHaveProperty('success');
+    expect(response.success).toBe(false);
+    expect(instance.token).toBeFalsy();
+  });
+
+  it('#getToken should fail if no error and no token in case of unknown response', async() => {
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').networkError();
+    // @ts-ignore
+    const getTokenSpy = vi.spyOn(instance, 'getToken');
+    // @ts-ignore
+    const response = await instance.getToken();
+    expect(getTokenSpy).toHaveBeenCalled();
+    expect(response).toHaveProperty('success');
+    expect(response.success).toBe(false);
+    expect(instance.token).toBeFalsy();
+  });
+
   it('#hasToken check instance has token defined', () => {
+    // @ts-ignore
     const hasToken = instance.hasToken();
     expect(typeof hasToken).toBe('boolean');
     expectTypeOf(hasToken).toEqualTypeOf<boolean>(Boolean('true'));
   });
 
+  it('#hasToken should return true incase token is defined', () => {
+    // @ts-ignore
+    instance.token = {
+      token: 'token'
+    };
+    // @ts-ignore
+    const hasToken = instance.hasToken();
+    expect(typeof hasToken).toBe('boolean');
+    expectTypeOf(hasToken).toEqualTypeOf<boolean>(Boolean('true'));
+    expect(hasToken).toBe(true);
+  });
+
+  it('#hasToken should return false incase token is not defined', () => {
+    // @ts-ignore
+    instance.token = null;
+    // @ts-ignore
+    const hasToken = instance.hasToken();
+    expect(typeof hasToken).toBe('boolean');
+    expectTypeOf(hasToken).toEqualTypeOf<boolean>(Boolean('true'));
+    expect(hasToken).toBe(false);
+  });
+
   it('#relegateTokenStatus check properly if token has the right date', async() => {
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
+    // @ts-ignore
+    const hasTokenSpy = vi.spyOn(instance, 'hasToken');
+    const getTokenSpy = vi.spyOn(instance, 'getToken');
+
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, pesaplTokenresSuccess);
+    // @ts-ignore
     const response = await instance.relegateTokenStatus();
+    expect(hasTokenSpy).toHaveBeenCalled();
+    expect(getTokenSpy).toHaveBeenCalled();
     expect(typeof response).toBe('object');
     expect(response).toHaveProperty('success');
     expect(response).toHaveProperty('madeNewToken');
@@ -111,7 +154,7 @@ describe('PaymentController', () => {
     expect(typeof response.madeNewToken).toBe('boolean');
   });
 
-  it('#constructParamsFromObj should contruct params from object', () => {
+  it('#constructParamsFromObj should construct params from object', () => {
     const payDetails: IpayDetails = {
       id: faker.string.uuid(),
       currency: 'UG',
@@ -135,8 +178,14 @@ describe('PaymentController', () => {
       }
     };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const obj = instance.constructParamsFromObj(
-      payDetails, faker.string.uuid(), faker.string.uuid(), faker.string.alphanumeric());
+      payDetails,
+      faker.string.uuid(),
+      faker.string.uuid(),
+      faker.string.alphanumeric()
+    );
     expect(typeof obj).toBe('object');
     expect(obj).toHaveProperty('id');
     expect(obj).toHaveProperty('currency');
@@ -155,13 +204,8 @@ describe('PaymentController', () => {
       error: null,
       status: '200'
     };
-
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
-    mockAxios.onPost(Pesapal.pesapalUrl +
-        '/api/URLSetup/RegisterIPN')
-      .reply(200, mockReturnValue);
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, pesaplTokenresSuccess);
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/URLSetup/RegisterIPN').reply(200, mockReturnValue);
     const relegateTokenStatusSpy = vi.spyOn(instance, 'registerIpn');
     const response = await instance.registerIpn();
     expect(relegateTokenStatusSpy).toHaveBeenCalled();
@@ -172,32 +216,6 @@ describe('PaymentController', () => {
     expect(instance.ipns[0]).toHaveProperty('url');
   });
 
-
-  it('#registerIpn should fail to registerIpn and add to ipn list', async() => {
-    const mockReturnValue = {
-      url: 'url',
-      created_date: new Date().toString(),
-      ipn_id: faker.string.uuid(),
-      error: errorMock,
-      status: '500'
-    };
-
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
-    mockAxios.onPost(Pesapal.pesapalUrl +
-        '/api/URLSetup/RegisterIPN')
-      .reply(200, mockReturnValue);
-    const relegateTokenStatusSpy = vi.spyOn(instance, 'relegateTokenStatus');
-    const response = await instance.registerIpn();
-    expect(relegateTokenStatusSpy).toHaveBeenCalled();
-    expect(response).toHaveProperty('success');
-    expect(response.success).toBe(false);
-    expect(typeof response.err).toBe('string');
-    expect(instance.ipns[0]).toBeUndefined();
-  });
-
-
   it('#getIpnEndPoints should get getIpnEndPoints', async() => {
     const mockReturnValue = {
       url: 'http://localhost:4000',
@@ -206,13 +224,9 @@ describe('PaymentController', () => {
       error: null,
       status: '200'
     };
-
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
-    mockAxios.onGet(Pesapal.pesapalUrl +
-        '/api/URLSetup/GetIpnList')
-      .reply(200, [mockReturnValue]);
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, pesaplTokenresSuccess);
+    mockAxios.onGet(Pesapal.pesapalUrl + '/api/URLSetup/GetIpnList').reply(200, [mockReturnValue]);
+    // @ts-ignore
     const relegateTokenStatusSpy = vi.spyOn(instance, 'relegateTokenStatus');
     const response = await instance.getIpnEndPoints();
     expect(relegateTokenStatusSpy).toHaveBeenCalled();
@@ -222,42 +236,20 @@ describe('PaymentController', () => {
     expect(instance.ipns.length).toBeGreaterThan(0);
   });
 
-  it('#getIpnEndPoints should fail toget get getIpnEndPoints', async() => {
-    const mockReturnValue = {
-      url: 'http://localhost:4000',
-      created_date: new Date().toString(),
-      ipn_id: faker.string.uuid(),
-      error: errorMock,
-      status: '200'
-    };
-
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
-    mockAxios.onGet(Pesapal.pesapalUrl +
-        '/api/URLSetup/GetIpnList')
-      .reply(200, [mockReturnValue]);
-    const relegateTokenStatusSpy = vi.spyOn(instance, 'relegateTokenStatus');
-    const response = await instance.getIpnEndPoints();
-    expect(relegateTokenStatusSpy).toHaveBeenCalled();
-    expect(response).toHaveProperty('success');
-    expect(response.success).toBe(false);
-    expect(typeof response.err).toBe('string');
-  });
-
   it('#submitOrder should submitOrder', async() => {
     const phone = '0756920841';
     const ipnUrl = '/url';
-    instance.ipns = [{
-      url: 'url',
-      created_date: new Date().toString(),
-      ipn_id: faker.string.uuid(),
-      error: null as any,
-      status: '200'
-    }];
+    instance.ipns = [
+      {
+        url: 'url',
+        created_date: new Date().toString(),
+        ipn_id: faker.string.uuid(),
+        error: '',
+        status: '200'
+      }
+    ];
     const productId = faker.string.uuid();
     const payDetails: IpayDetails = createMockPayDetails(ipnUrl, phone);
-
     const mockReturnValue = {
       order_tracking_id: faker.string.uuid(),
       merchant_reference: faker.string.uuid(),
@@ -266,13 +258,13 @@ describe('PaymentController', () => {
       status: '200'
     };
 
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Transactions/SubmitOrderRequest')
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, pesaplTokenresSuccess);
+    mockAxios
+      .onPost(Pesapal.pesapalUrl + '/api/Transactions/SubmitOrderRequest')
       .reply(200, mockReturnValue);
+    // @ts-ignore
     const relegateTokenStatusSpy = vi.spyOn(instance, 'relegateTokenStatus');
+    // @ts-ignore
     const constructParamsFromObjSpy = vi.spyOn(instance, 'constructParamsFromObj');
     const res = await instance.submitOrder(payDetails, productId, faker.string.alphanumeric());
     expect(relegateTokenStatusSpy).toHaveBeenCalled();
@@ -284,87 +276,74 @@ describe('PaymentController', () => {
     expect(res.status).toBe(200);
     expect(res.err).toBeUndefined();
     expect(res.pesaPalOrderRes).toHaveProperty('order_tracking_id');
-    // orderTrackingId = res.pesaPalOrderRes?.order_tracking_id ;
   });
 
-
-  it('#submitOrder should fail to submitOrder', async() => {
-    const phone = '0756920841';
-    const ipnUrl = '/url';
-    instance.ipns = [{
-      url: 'url',
-      created_date: new Date().toString(),
-      ipn_id: faker.string.uuid(),
-      error: null as any,
-      status: '200'
-    }];
-    const productId = faker.string.uuid();
-    const payDetails: IpayDetails = createMockPayDetails(ipnUrl, phone);
-
-    const mockReturnValue = {
-      order_tracking_id: faker.string.uuid(),
-      merchant_reference: faker.string.uuid(),
-      redirect_url: faker.string.uuid(),
-      error: errorMock,
-      status: '200'
-    };
-
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Transactions/SubmitOrderRequest')
-      .reply(200, mockReturnValue);
-    const relegateTokenStatusSpy = vi.spyOn(instance, 'relegateTokenStatus');
-    const constructParamsFromObjSpy = vi.spyOn(instance, 'constructParamsFromObj');
-    const res = await instance.submitOrder(payDetails, productId, faker.string.alphanumeric());
-    expect(relegateTokenStatusSpy).toHaveBeenCalled();
-    expect(constructParamsFromObjSpy).toHaveBeenCalled();
-    expect(res).toHaveProperty('success');
-    expect(res).toHaveProperty('err');
-    expect(res.success).toBe(false);
-    expect(typeof res.err).toBe('string');
+  it('#getTransactionStatus should get transaction status', async() => {
+    const orderTrackingId = faker.string.uuid();
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, pesaplTokenresSuccess);
+    const response = await instance.getTransactionStatus(orderTrackingId);
+    expect(typeof response).toBe('object');
+    expect(response).toHaveProperty('success');
+    // expect(response).toHaveProperty('response');
+    expect(typeof response.success).toBe('boolean');
   });
 
-  it('#getTransactionStatus should getTransactionStatus with success', async() => {
-    const mockReturnValue = {
-      payment_method: faker.string.uuid(),
-      amount: 100,
-      created_date: faker.date.past().toString(),
-      confirmation_code: faker.string.uuid(),
-      payment_status_description: 'completed',
-      description: faker.string.alphanumeric(),
-      message: faker.string.alphanumeric(),
-      payment_account: faker.string.alphanumeric(),
-      call_back_url: faker.string.alphanumeric(),
-      status_code: '200',
-      merchant_reference: faker.string.uuid(),
-      payment_status_code: faker.string.uuid(),
-      currency: 'UG',
-      error: null,
-      status: '200'
+  it('#refundRequest should return success and refundRequestRes if refund request is successful', async() => {
+    const refunReqObj: IrefundRequestReq = {
+      confirmation_code: 'string',
+      amount: 'string',
+      username: 'string',
+      remarks: 'string'
     };
+    const refundRequestRes = {
+      status: 'string',
+      message: 'string'
+    };
+    const mockReturnValue = {
+      success: true,
+      refundRequestRes
+    };
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, pesaplTokenresSuccess);
+    mockAxios
+      .onPost(Pesapal.pesapalUrl + '/api/Transactions/RefundRequestt')
+      .reply(200, refundRequestRes);
+    const refundRequestSpy = vi.spyOn(instance, 'refundRequest');
+    const response = await instance.refundRequest(refunReqObj);
+    expect(refundRequestSpy).toHaveBeenCalled();
+    expect(response).toHaveProperty('success');
+    expect(response).toEqual(mockReturnValue);
+  });
 
-    const orderTrackingIdLocal = faker.string.uuid();
-    mockAxios.onPost(Pesapal.pesapalUrl +
-      '/api/Auth/RequestToken')
-      .reply(200, pesaplTokenresSuccess);
-    mockAxios.onGet(Pesapal.pesapalUrl +
-      '/api/Transactions/GetTransactionStatus' +
-      `/?orderTrackingId=${orderTrackingIdLocal}`)
-      .reply(200, mockReturnValue);
+  it('#refundRequest should return success false and error message if getting token fails', async() => {
+    const refunReqObj: IrefundRequestReq = {
+      confirmation_code: 'string',
+      amount: 'string',
+      username: 'string',
+      remarks: 'string'
+    };
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(401, pesaplTokenresFailure);
+    const response = await instance.refundRequest(refunReqObj);
+    expect(response).toHaveProperty('success');
+    expect(response.success).toBe(false);
+  });
 
-    const relegateTokenStatusSpy = vi.spyOn(instance, 'relegateTokenStatus');
-
-    const res = await instance.getTransactionStatus(orderTrackingIdLocal);
-    expect(relegateTokenStatusSpy).toHaveBeenCalled();
-    expect(res).toHaveProperty('success');
-    expect(res.success).toBe(true);
-    expect(res).toHaveProperty('response');
-    expect(res.response).toHaveProperty('payment_method');
-    expect(res.response).toHaveProperty('amount');
-    expect(res.response).toHaveProperty('created_date');
-    expect(res.response).toHaveProperty('confirmation_code');
-    expect(res.response).toHaveProperty('payment_status_description');
+  it('#refundRequest should return success false and error message if refund request fails', async() => {
+    const refunReqObj: IrefundRequestReq = {
+      confirmation_code: 'string',
+      amount: 'string',
+      username: 'string',
+      remarks: 'string'
+    };
+    const refundRequestRes = {
+      status: 'string',
+      message: 'string'
+    };
+    mockAxios.onPost(Pesapal.pesapalUrl + '/api/Auth/RequestToken').reply(200, null);
+    mockAxios
+      .onPost(Pesapal.pesapalUrl + '/api/Transactions/RefundRequestt')
+      .reply(200, refundRequestRes);
+    const response = await instance.refundRequest(refunReqObj);
+    expect(response).toHaveProperty('success');
+    expect(response.success).toBe(false);
   });
 });

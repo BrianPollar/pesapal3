@@ -1,12 +1,11 @@
 # pesapal3
 
-A nodejs implementation of pesapal payment gateway api.
+A nodejs implementation of the pesapal payment gateway API.
 A simple library for making payments with PesaPal.
 
 ## Features
 
-pesapal3 implements secure pesapal payment gateway for nodejs. It consists of:
-
+pesapal3 implements a secure pesapal payment gateway for nodejs.
 Its main features are:
 
 #### Reliability
@@ -147,6 +146,114 @@ paymentRoutes.get("/ipn", async (req, res) => {
   );
   return response;
 });
+```
+
+## Register IPN
+
+```ts
+import { PesaPalController, IrefundRequestReq } from "pesapal3";
+const config: Iconfig = {
+  pesapalEnvironment: "live", // or sandbox
+  pesapalConsumerKey: "your-consumer-key",
+  pesapalConsumerSecret: "your-consumer-secret",
+  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
+};
+
+const pesapal = new Pesapal(config);
+
+// run the library with
+const paymentInstance = pesapal.run();
+
+/** By default they are, as this uses the values provided in the config, but if you
+ * want to specify additional ipn end points for transcation notification and response type
+ * you can pass in the parameters as below
+ */
+const ipn = "https://myserverdomain.com";
+const notificationMethodType = "GET";
+
+const response = await registerIpn(pin, notificationMethodType);
+```
+
+## Get Ipn Endpoints
+
+If you want to get all the registered Ipn end point you would use the getIpnEndPoints
+
+```ts
+import { PesaPalController, IrefundRequestReq } from "pesapal3";
+const config: Iconfig = {
+  pesapalEnvironment: "live", // or sandbox
+  pesapalConsumerKey: "your-consumer-key",
+  pesapalConsumerSecret: "your-consumer-secret",
+  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
+};
+
+const pesapal = new Pesapal(config);
+
+// run the library with
+const paymentInstance = pesapal.run();
+
+const response = await paymentInstance.getIpnEndPoints();
+```
+
+## Get Transcation Status
+
+```ts
+import { PesaPalController, IrefundRequestReq } from "pesapal3";
+const config: Iconfig = {
+  pesapalEnvironment: "live", // or sandbox
+  pesapalConsumerKey: "your-consumer-key",
+  pesapalConsumerSecret: "your-consumer-secret",
+  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
+};
+
+const pesapal = new Pesapal(config);
+
+// run the library with
+const paymentInstance = pesapal.run();
+
+const orderTrackingId = "15113631262323623734734";
+
+const response = await paymentInstance.getTransactionStatus(orderTrackingId);
+```
+
+## Recurring transactions
+
+If you want to implement recurring subscriptions, you would do it as follows
+
+## Refund
+
+Refund of users payment is made
+you would use the api below
+
+```ts
+import { PesaPalController, IrefundRequestReq } from 'pesapal3'
+const config: Iconfig = {
+  pesapalEnvironment: "live", // or sandbox
+  pesapalConsumerKey: "your-consumer-key",
+  pesapalConsumerSecret: "your-consumer-secret",
+  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
+};
+
+const pesapal = new Pesapal(config);
+
+// run the library with
+const paymentInstance = pesapal.run();
+
+// provide refund objcet
+const refundRequestReq: IrefundRequestReq {
+  confirmation_code: 'confirmation_code'
+  amount: '100',
+  username: 'John Doe',
+  remarks: 'product out of stock'
+}
+
+
+// refundRequest
+const response = await paymentInstance.refundRequest()
 ```
 
 ## Documentation

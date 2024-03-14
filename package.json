@@ -8,7 +8,8 @@
   "scripts": {
     "compileLib": "tsc",
     "publishLib": "npm publish",
-    "test:vite": "vitest"
+    "test:vite": "vitest",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [
     "pesapal",
