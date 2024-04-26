@@ -40,7 +40,7 @@ export class Pesapal {
    * `merchantId`: The merchant ID for PesaPal.
    * `secretKey`: The secret key for PesaPal.
    */
-  static config: Iconfig;
+  // static config: Iconfig;
 
   /**
    * This is a static property that holds the URL for PesaPal.
@@ -55,13 +55,13 @@ export class Pesapal {
   private paymentInstance: PesaPalController;
 
   constructor(config: Iconfig) {
-    Pesapal.config = config;
+    // Pesapal.config = config;
     if (config.pesapalEnvironment === 'live') {
       Pesapal.pesapalUrl = 'https://pay.pesapal.com/v3';
     } else {
       Pesapal.pesapalUrl = 'https://cybqa.pesapal.com/pesapalv3';
     }
-    this.paymentInstance = new PesaPalController();
+    this.paymentInstance = new PesaPalController(config);
   }
 
   /**

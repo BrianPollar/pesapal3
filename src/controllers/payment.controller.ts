@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { IendpointResponse, IgetIpnEndPointsRes, IgetTokenRes, IgetTransactionStatusRes, IipnResponse, IorderResponse, IpayDetails, IpesaPalError, IpesaPalToken, IrefundRequestReq, IrefundRequestRes, IrefundRequestResComplete, IregisterIpnRes, IrelegateTokenStatusRes, IsubmitOrderRes, TnotificationMethodType } from '../interfaces/general.interface';
-import { Pesapal } from '../pesapal';
+import { faker } from '@faker-js/faker';
 import axios from 'axios';
 import { getLogger } from 'log4js';
-import { faker } from '@faker-js/faker';
+import { IendpointResponse, IgetIpnEndPointsRes, IgetTokenRes, IgetTransactionStatusRes, IipnResponse, IorderResponse, IpayDetails, IpesaPalError, IpesaPalToken, IrefundRequestReq, IrefundRequestRes, IrefundRequestResComplete, IregisterIpnRes, IrelegateTokenStatusRes, IsubmitOrderRes, TnotificationMethodType } from '../interfaces/general.interface';
+import { Iconfig, Pesapal } from '../pesapal';
 
 const logger = getLogger('paymentController');
 
@@ -65,7 +65,7 @@ export class PesaPalController {
   // callbackUrl: string; // main callback url
   notificationId: string;
 
-  constructor() {}
+  constructor(public config: Iconfig) {}
 
   /**
  * This method registers the IPN URL with PesaPal.
@@ -80,7 +80,7 @@ export class PesaPalController {
       return { success: false, err: 'couldnt resolve getting token' };
     }
 
-    const ipnUrl = ipn || Pesapal.config.pesapalIpnUrl;
+    const ipnUrl = ipn || this.config.pesapalIpnUrl;
     const ipnNotificationType = notificationMethodType || 'GET';
 
     const parameters = {
@@ -296,8 +296,8 @@ export class PesaPalController {
       ...this.defaultHeaders
     };
     const parameters = {
-      consumer_key: Pesapal.config.pesapalConsumerKey,
-      consumer_secret: Pesapal.config.pesapalConsumerSecret
+      consumer_key: this.config.pesapalConsumerKey,
+      consumer_secret: this.config.pesapalConsumerSecret
     };
 
     return new Promise(resolve => {
@@ -414,7 +414,7 @@ export class PesaPalController {
       currency: paymentDetails.currency || countryCurrency,
       amount: paymentDetails.amount,
       description,
-      callback_url: Pesapal.config.pesapalCallbackUrl + '/' + id,
+      callback_url: this.config.pesapalCallbackUrl,
       notification_id: notificationId,
       billing_address: {
         email_address: paymentDetails.billing_address?.email_address,
