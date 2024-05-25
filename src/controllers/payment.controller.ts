@@ -203,6 +203,7 @@ export class PesaPalController {
       Authorization: 'Bearer  ' + this.token.token
     };
 
+    logger.debug('IPNS ARE', this.ipns);
     const notifId = this.ipns[0].ipn_id;
 
     return new Promise(resolve => {
