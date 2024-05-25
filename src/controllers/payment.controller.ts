@@ -427,13 +427,13 @@ export class PesaPalController {
   private constructParamsFromObj(
     paymentDetails: IpayDetails,
     notificationId: string,
-    id: string | undefined,
+    id: string,
     description: string,
     countryCode = 'UG',
     countryCurrency = 'UGA'
   ) {
     const constructedObj = {
-      id,
+      id: id || paymentDetails.id,
       currency: paymentDetails.currency || countryCurrency,
       amount: paymentDetails.amount,
       description,
