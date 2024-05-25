@@ -214,7 +214,7 @@ export class PesaPalController {
         .then(res => {
           const response = res.data as IorderResponse;
           if (response.error) {
-            logger.error('PesaPalController, submitOrder err', response.error);
+            logger.error('PesaPalController, submitOrder error', response.error);
             resolve({ success: false, err: (response.error as IpesaPalError).message || response.error });
           } else {
             resolve({ success: true, status: 200, pesaPalOrderRes: response });
@@ -431,8 +431,7 @@ export class PesaPalController {
     countryCode = 'UG',
     countryCurrency = 'UGA'
   ) {
-    logger.debug('constructParamsFromObj, paymentDetails', paymentDetails);
-    return {
+    const constructedObj = {
       id,
       currency: paymentDetails.currency || countryCurrency,
       amount: paymentDetails.amount,
@@ -454,6 +453,8 @@ export class PesaPalController {
         zip_code: paymentDetails.billing_address?.zip_code
       }
     };
+    logger.debug('constructParamsFromObj, constructedObj', paymentDetails);
+    return constructedObj;
   }
 
   /**
