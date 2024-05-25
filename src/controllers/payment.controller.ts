@@ -214,6 +214,7 @@ export class PesaPalController {
         .then(res => {
           const response = res.data as IorderResponse;
           if (response.error) {
+            logger.error('PesaPalController, submitOrder err', response.error);
             resolve({ success: false, err: (response.error as IpesaPalError).message || response.error });
           } else {
             resolve({ success: true, status: 200, pesaPalOrderRes: response });
