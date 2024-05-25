@@ -454,7 +454,7 @@ export class PesaPalController {
         zip_code: paymentDetails.billing_address?.zip_code
       }
     };
-    logger.debug('constructParamsFromObj, constructedObj', paymentDetails);
+    logger.debug('constructParamsFromObj, constructedObj', constructedObj);
     return constructedObj;
   }
 
