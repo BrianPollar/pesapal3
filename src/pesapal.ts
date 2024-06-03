@@ -72,8 +72,9 @@ export class Pesapal {
    * `return this.paymentInstance;`
    * This method returns the instance of the `PesaPalController` class.
    */
-  run() {
-    this.paymentInstance.registerIpn();
+  async run() {
+    await this.paymentInstance.registerIpn();
+    await this.paymentInstance.getIpnEndPoints();
     return this.paymentInstance;
   }
 }

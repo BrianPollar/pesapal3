@@ -160,6 +160,7 @@ export class PesaPalController {
         { headers })
         .then(res => {
           const response = res.data as IipnResponse[];
+          logger.debug('PesaPalController, getIpnEndPoints response', response);
           if (response[0] && response[0].error) {
             resolve({ success: false, err: (response[0].error as IpesaPalError).message || response[0].error });
           } else {
