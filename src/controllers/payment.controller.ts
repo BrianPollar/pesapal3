@@ -93,7 +93,9 @@ export class PesaPalController {
 
   interceptAxios() {
     axios.interceptors.request.use((config) => {
-      config.headers.Authorization = 'Bearer ' + this.token?.token;
+      if (this.token && this.token.token) {
+        config.headers.Authorization = 'Bearer ' + this.token?.token;
+      }
       return config;
     });
   }
