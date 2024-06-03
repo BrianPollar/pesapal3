@@ -54,6 +54,7 @@ export declare class PesaPalController {
     };
     notificationId: string;
     constructor(config: Iconfig);
+    interceptAxios(): void;
     /**
    * This method registers the IPN URL with PesaPal.
    * The method returns a promise with the following properties:
