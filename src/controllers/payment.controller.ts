@@ -87,7 +87,16 @@ export class PesaPalController {
   // callbackUrl: string; // main callback url
   notificationId: string;
 
-  constructor(public config: Iconfig) {}
+  constructor(public config: Iconfig) {
+    this.interceptAxios();
+  }
+
+  interceptAxios() {
+    axios.interceptors.request.use((config) => {
+      config.headers.Authorization = 'Bearer ' + this.token.token;
+      return config;
+    });
+  }
 
   /**
  * This method registers the IPN URL with PesaPal.
