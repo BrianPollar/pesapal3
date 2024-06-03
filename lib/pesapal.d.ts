@@ -53,5 +53,5 @@ export declare class Pesapal {
      * `return this.paymentInstance;`
      * This method returns the instance of the `PesaPalController` class.
      */
-    run(): PesaPalController;
+    run(): Promise<PesaPalController>;
 }

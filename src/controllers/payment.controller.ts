@@ -110,6 +110,8 @@ export class PesaPalController {
       ipn_notification_type: ipnNotificationType
     };
 
+    logger.error('TOKEN FOR TOKEN ', this.token.token);
+
     const headers = {
       ...this.defaultHeaders,
       Authorization: 'Bearer  ' + this.token.token
