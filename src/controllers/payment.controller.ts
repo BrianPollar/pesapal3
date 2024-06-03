@@ -111,11 +111,13 @@ export class PesaPalController {
     };
 
     logger.error('TOKEN FOR TOKEN ', this.token.token);
+    logger.info('Pesapal.pesapalUrl', Pesapal.pesapalUrl);
 
     const headers = {
       ...this.defaultHeaders,
       Authorization: 'Bearer  ' + this.token.token
     };
+    logger.info('headers', headers);
 
     return new Promise(resolve => {
       axios
