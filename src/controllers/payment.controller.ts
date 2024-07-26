@@ -1,3 +1,23 @@
+/**
+ * This class is a controller for PesaPal payments. It provides methods to interact with the PesaPal API, such as registering an IPN URL, submitting orders, getting transaction status, and requesting refunds.
+ *
+ * The class has the following properties:
+ * - `token`: The PesaPal token used for authentication.
+ * - `ipns`: An array of IPN response objects.
+ * - `defaultHeaders`: The default headers used for API requests.
+ * - `notificationId`: The notification ID used for submitting orders.
+ *
+ * The class provides the following methods:
+ * - `registerIpn`: Registers an IPN URL with PesaPal.
+ * - `getIpnEndPoints`: Retrieves the IPN endpoints from PesaPal.
+ * - `submitOrder`: Submits an order to PesaPal.
+ * - `getTransactionStatus`: Retrieves the status of a transaction from PesaPal.
+ * - `refundRequest`: Sends a refund request to PesaPal.
+ * - `getToken`: Retrieves a PesaPal token.
+ * - `relegateTokenStatus`: Checks the status of the PesaPal token and creates a new one if it's expired.
+ * - `constructParamsFromObj`: Constructs the parameters for submitting an order based on the provided payment details.
+ * - `hasToken`: Checks if a PesaPal token is present.
+ */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { faker } from '@faker-js/faker';
 import axios from 'axios';
@@ -6,28 +26,28 @@ import * as tracer from 'tracer';
 import { IendpointResponse, IgetIpnEndPointsRes, IgetTokenRes, IgetTransactionStatusRes, IipnResponse, IorderResponse, IpayDetails, IpesaPalError, IpesaPalToken, IrefundRequestReq, IrefundRequestRes, IrefundRequestResComplete, IregisterIpnRes, IrelegateTokenStatusRes, IsubmitOrderRes, TnotificationMethodType } from '../interfaces/general.interface';
 import { Iconfig, Pesapal } from '../pesapal';
 
-const logger = tracer.colorConsole(
-  {
-    format: '{{timestamp}} [{{title}}] {{message}} (in {{file}}:{{line}})',
-    dateformat: 'HH:MM:ss.L',
-    transport(data) {
-      // eslint-disable-next-line no-console
-      console.log(data.output);
-      const logDir = './serverLog/';
-      fs.mkdir(logDir, { recursive: true }, (err) => {
-        if (err) {
-          if (err) {
-            throw err;
-          }
-        }
-      });
-      fs.appendFile('./serverLog/pesapal.log', data.rawoutput + '\n', err => {
+const logger = tracer.colorConsole({
+  format: '{{timestamp}} [{{title}}] {{message}} (in {{file}}:{{line}})',
+  dateformat: 'HH:MM:ss.L',
+  transport(data) {
+    // eslint-disable-next-line no-console
+    console.log(data.output);
+    const logDir = './serverLog/';
+
+    fs.mkdir(logDir, { recursive: true }, (err) => {
+      if (err) {
         if (err) {
           throw err;
         }
-      });
-    }
-  });
+      }
+    });
+    fs.appendFile('./serverLog/pesapal.log', data.rawoutput + '\n', err => {
+      if (err) {
+        throw err;
+      }
+    });
+  }
+});
 
 /**
  * This function creates a mock pay details object.
@@ -43,8 +63,7 @@ const logger = tracer.colorConsole(
  * * `notification_id`: The notification ID of the pay details.
  * * `billing_address`: The billing address of the payer.
  */
-export const createMockPayDetails = (
-  ipnUrl: string, phone: string) => ({
+export const createMockPayDetails = (ipnUrl: string, phone: string) => ({
   id: faker.string.uuid(),
   currency: 'UGX',
   amount: 1000,
@@ -84,6 +103,7 @@ export class PesaPalController {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     'Content-Type': 'application/json'
   };
+
   // callbackUrl: string; // main callback url
   notificationId: string;
 
@@ -91,11 +111,18 @@ export class PesaPalController {
     this.interceptAxios();
   }
 
+  /**
+   * Intercepts Axios requests and adds the PesaPal token to the Authorization header if it is available.
+   * This ensures that the PesaPal token is included in all outgoing requests.
+   */
   interceptAxios() {
     axios.interceptors.request.use((config) => {
-      if (this.token && this.token.token) {
+      if (!this.tokenExpired()) {
         config.headers.Authorization = 'Bearer ' + this.token?.token;
+      } else {
+        config.headers.Authorization = '';
       }
+
       return config;
     });
   }
@@ -121,23 +148,23 @@ export class PesaPalController {
       ipn_notification_type: ipnNotificationType
     };
 
-    logger.error('TOKEN FOR TOKEN ', this.token.token);
-    logger.info('Pesapal.pesapalUrl', Pesapal.pesapalUrl);
 
     const headers = {
       ...this.defaultHeaders,
-      Authorization: 'Bearer  ' + this.token.token
+      Authorization: 'Bearer  ' + this.token?.token
     };
-    logger.info('headers', headers);
 
     return new Promise(resolve => {
       axios
-        .post(Pesapal.pesapalUrl +
+        .post(
+          Pesapal.pesapalUrl +
         '/api/URLSetup/RegisterIPN',
-        parameters,
-        { headers })
+          parameters,
+          { headers }
+        )
         .then(res => {
           const response = res.data as IipnResponse;
+
           if (response.error) {
             resolve({ success: false, err: (response.error as IpesaPalError).message || response.error });
           } else {
@@ -168,13 +195,17 @@ export class PesaPalController {
       ...this.defaultHeaders,
       Authorization: 'Bearer  ' + this.token.token
     };
+
     return new Promise(resolve => {
       axios
-        .get(Pesapal.pesapalUrl +
+        .get(
+          Pesapal.pesapalUrl +
         '/api/URLSetup/GetIpnList',
-        { headers })
+          { headers }
+        )
         .then(res => {
           const response = res.data as IipnResponse[];
+
           logger.debug('PesaPalController, getIpnEndPoints response', response);
           if (response[0] && response[0].error) {
             resolve({ success: false, err: (response[0].error as IpesaPalError).message || response[0].error });
@@ -224,12 +255,15 @@ export class PesaPalController {
 
     return new Promise(resolve => {
       axios
-        .post(Pesapal.pesapalUrl +
+        .post(
+          Pesapal.pesapalUrl +
         '/api/Transactions/SubmitOrderRequest',
-        this.constructParamsFromObj(paymentDetails, notifId, productId, description),
-        { headers })
+          this.constructParamsFromObj(paymentDetails, notifId, productId, description),
+          { headers }
+        )
         .then(res => {
           const response = res.data as IorderResponse;
+
           if (response.error) {
             logger.error('PesaPalController, submitOrder error', response.error);
             resolve({ success: false, err: (response.error as IpesaPalError).message || response.error });
@@ -266,12 +300,15 @@ export class PesaPalController {
 
     return new Promise(resolve => {
       axios
-        .get(Pesapal.pesapalUrl +
+        .get(
+          Pesapal.pesapalUrl +
         '/api/Transactions/GetTransactionStatus' +
         `/?orderTrackingId=${orderTrackingId}`,
-        { headers })
+          { headers }
+        )
         .then(res => {
           const response = res.data as IendpointResponse;
+
           if (response.error) {
             resolve({ success: false, err: response.error.message || response.error });
           } else if (response.payment_status_description.toLowerCase() === 'completed') {
@@ -306,12 +343,15 @@ export class PesaPalController {
 
     return new Promise(resolve => {
       axios
-        .post(Pesapal.pesapalUrl +
+        .post(
+          Pesapal.pesapalUrl +
         '/api/Transactions/RefundRequestt',
-        refunReqObj,
-        { headers })
+          refunReqObj,
+          { headers }
+        )
         .then(res => {
           const response = res.data as IrefundRequestRes;
+
           if (!response) {
             resolve({ success: false, err: 'somethinh went wrong' });
           } else {
@@ -342,12 +382,15 @@ export class PesaPalController {
 
     return new Promise(resolve => {
       axios
-        .post(Pesapal.pesapalUrl +
+        .post(
+          Pesapal.pesapalUrl +
         '/api/Auth/RequestToken',
-        parameters,
-        { headers })
+          parameters,
+          { headers }
+        )
         .then(res => {
           const data = res.data as IpesaPalToken;
+
           logger.debug('response data from getToken()', data);
 
           if (data?.error) {
@@ -366,6 +409,7 @@ export class PesaPalController {
               success: false,
               err: 'unknown err, sorry but unknown error occured'
             };
+
             resolve(toReturn);
             // resolve({ success: false, err: 'sorry not token' });
           }
@@ -375,6 +419,16 @@ export class PesaPalController {
           resolve({ success: false, err });
         });
     });
+  }
+
+  private tokenExpired() {
+    if (!this.hasToken()) {
+      return true;
+    }
+    const nowDate = new Date();
+    const tokenDate = new Date(this.token.expiryDate);
+
+    return nowDate > tokenDate;
   }
 
   /**
@@ -390,14 +444,15 @@ export class PesaPalController {
       success: false,
       madeNewToken: false
     };
+
     if (this.hasToken()) {
-      const nowDate = new Date();
-      const tokenDate = new Date(this.token.expiryDate);
-      if (nowDate > tokenDate) {
+      if (this.tokenExpired()) {
         const tokenRes = await this.getToken();
+
         if (!tokenRes.success) {
           response.success = false;
           response.madeNewToken = false;
+
           return response;
         } else {
           response.success = true;
@@ -410,6 +465,7 @@ export class PesaPalController {
       }
     } else {
       const tokenRes = await this.getToken();
+
       if (!tokenRes.success) {
         response.success = false;
         response.madeNewToken = false;
@@ -418,6 +474,7 @@ export class PesaPalController {
         response.madeNewToken = false;
       }
     }
+
     return response;
   }
 
@@ -470,7 +527,9 @@ export class PesaPalController {
         zip_code: paymentDetails.billing_address?.zip_code
       }
     };
+
     logger.debug('constructParamsFromObj, constructedObj', constructedObj);
+
     return constructedObj;
   }
 
