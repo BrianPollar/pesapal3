@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { vi, expect, describe, beforeEach, it } from 'vitest';
-import { Pesapal, Iconfig } from '../../src/pesapal';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PesaPalController } from '../../src/controllers/payment.controller';
+import { Iconfig, Pesapal } from '../../src/pesapal';
 
 describe('Pesapal', () => {
   let instance: Pesapal;
@@ -12,8 +12,7 @@ describe('Pesapal', () => {
       pesapalEnvironment: 'sandbox',
       pesapalConsumerKey: 'TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev',
       pesapalConsumerSecret: '1KpqkfsMaihIcOlhnBo/gBZ5smw=',
-      pesapalIpnUrl: 'http://localhost:4000/payment',
-      pesapalCallbackUrl: 'http://localhost:4000/payment'
+      pesapalIpnUrl: 'http://localhost:4000/payment'
     };
     instance = new Pesapal(config);
   });
@@ -29,8 +28,7 @@ describe('Pesapal', () => {
       pesapalEnvironment: 'live',
       pesapalConsumerKey: 'TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev',
       pesapalConsumerSecret: '1KpqkfsMaihIcOlhnBo/gBZ5smw=',
-      pesapalIpnUrl: 'http://localhost:4000/payment',
-      pesapalCallbackUrl: 'http://localhost:4000/payment'
+      pesapalIpnUrl: 'http://localhost:4000/payment'
     };
     instance = new Pesapal(config);
     expect(Pesapal.pesapalUrl).toBe('https://pay.pesapal.com/v3');
@@ -41,8 +39,7 @@ describe('Pesapal', () => {
       pesapalEnvironment: 'sandbox',
       pesapalConsumerKey: 'TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev',
       pesapalConsumerSecret: '1KpqkfsMaihIcOlhnBo/gBZ5smw=',
-      pesapalIpnUrl: 'http://localhost:4000/payment',
-      pesapalCallbackUrl: 'http://localhost:4000/payment'
+      pesapalIpnUrl: 'http://localhost:4000/payment'
     });
     expect(Pesapal.pesapalUrl).toBe('https://cybqa.pesapal.com/pesapalv3');
   });
@@ -54,6 +51,7 @@ describe('Pesapal', () => {
   it('should register IPN and return an instance of PesaPalController', () => {
     const registerIpnSpy = vi.spyOn(instance['paymentInstance'], 'registerIpn');
     const paymentInstance = instance.run();
+
     expect(registerIpnSpy).toHaveBeenCalled();
     expect(paymentInstance).toBeInstanceOf(PesaPalController);
   });

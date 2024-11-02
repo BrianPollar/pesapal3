@@ -31,7 +31,6 @@ const config: Iconfig = {
   pesapalConsumerKey: "your-consumer-key",
   pesapalConsumerSecret: "your-consumer-secret",
   pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
-  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
 };
 
 const pesapal = new Pesapal(config);
@@ -82,7 +81,6 @@ const config: Iconfig = {
   pesapalConsumerKey: "your-consumer-key",
   pesapalConsumerSecret: "your-consumer-secret",
   pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
-  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
 };
 
 const pesapal = new Pesapal(config);
@@ -157,7 +155,6 @@ const config: Iconfig = {
   pesapalConsumerKey: "your-consumer-key",
   pesapalConsumerSecret: "your-consumer-secret",
   pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
-  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
 };
 
 const pesapal = new Pesapal(config);
@@ -186,7 +183,6 @@ const config: Iconfig = {
   pesapalConsumerKey: "your-consumer-key",
   pesapalConsumerSecret: "your-consumer-secret",
   pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
-  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
 };
 
 const pesapal = new Pesapal(config);
@@ -206,7 +202,6 @@ const config: Iconfig = {
   pesapalConsumerKey: "your-consumer-key",
   pesapalConsumerSecret: "your-consumer-secret",
   pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
-  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
 };
 
 const pesapal = new Pesapal(config);
@@ -234,8 +229,7 @@ const config: Iconfig = {
   pesapalEnvironment: "live", // or sandbox
   pesapalConsumerKey: "your-consumer-key",
   pesapalConsumerSecret: "your-consumer-secret",
-  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
-  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
+  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn"
 };
 
 const pesapal = new Pesapal(config);

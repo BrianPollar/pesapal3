@@ -1,5 +1,7 @@
 /**
- * This class is a controller for PesaPal payments. It provides methods to interact with the PesaPal API, such as registering an IPN URL, submitting orders, getting transaction status, and requesting refunds.
+ * This class is a controller for PesaPal payments.
+ * It provides methods to interact with the PesaPal API,
+ * such as registering an IPN URL, submitting orders, getting transaction status, and requesting refunds.
  *
  * The class has the following properties:
  * - `token`: The PesaPal token used for authentication.
@@ -23,7 +25,13 @@ import { faker } from '@faker-js/faker';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as tracer from 'tracer';
-import { IendpointResponse, IgetIpnEndPointsRes, IgetTokenRes, IgetTransactionStatusRes, IipnResponse, IorderResponse, IpayDetails, IpesaPalError, IpesaPalToken, IrefundRequestReq, IrefundRequestRes, IrefundRequestResComplete, IregisterIpnRes, IrelegateTokenStatusRes, IsubmitOrderRes, TnotificationMethodType } from '../interfaces/general.interface';
+import {
+  IendpointResponse, IgetIpnEndPointsRes, IgetTokenRes,
+  IgetTransactionStatusRes, IipnResponse, IorderResponse, IpayDetails,
+  IpesaPalError, IpesaPalToken, IrefundRequestReq, IrefundRequestRes,
+  IrefundRequestResComplete, IregisterIpnRes, IrelegateTokenStatusRes,
+  IsubmitOrderRes, TnotificationMethodType
+} from '../interfaces/general.interface';
 import { Iconfig, Pesapal } from '../pesapal';
 
 const logger = tracer.colorConsole({
@@ -510,7 +518,7 @@ export class PesaPalController {
       currency: paymentDetails.currency || countryCurrency,
       amount: paymentDetails.amount,
       description,
-      callback_url: this.config.pesapalCallbackUrl,
+      callback_url: paymentDetails.callback_url,
       notification_id: notificationId,
       billing_address: {
         email_address: paymentDetails.billing_address?.email_address,

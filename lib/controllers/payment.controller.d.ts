@@ -54,6 +54,10 @@ export declare class PesaPalController {
     };
     notificationId: string;
     constructor(config: Iconfig);
+    /**
+     * Intercepts Axios requests and adds the PesaPal token to the Authorization header if it is available.
+     * This ensures that the PesaPal token is included in all outgoing requests.
+     */
     interceptAxios(): void;
     /**
    * This method registers the IPN URL with PesaPal.
@@ -106,6 +110,7 @@ export declare class PesaPalController {
    * * `err`: The error, if any.
    */
     getToken(): Promise<IgetTokenRes>;
+    private tokenExpired;
     /**
    * This method checks the status of the token and creates a new token if it is expired.
    *

@@ -31,13 +31,11 @@ pesapal3 offers a comprehensive set of features for seamless PesaPal integration
 
 ## Installation
 
-
 // with npm
 npm install pesapal3
 
 // with yarn
 yarn add pesapal3
-
 
 ## Usage
 
@@ -52,7 +50,6 @@ const config: Iconfig = {
   pesapalConsumerKey: "your-consumer-key",
   pesapalConsumerSecret: "your-consumer-secret",
   pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
-  pesapalCallbackUrl: "https://yoursitedomain/pesapal/callback",
 };
 
 // Initialize PesaPal instance
@@ -87,11 +84,17 @@ paymentRoutes.get("/ipn", async (req, res) => {
   const searchParams = currntUrl.searchParams;
 
   const orderTrackingId = searchParams.get("OrderTrackingId") as string;
-  const orderNotificationType = searchParams.get("OrderNotificationType") as string;
-  const orderMerchantReference = searchParams.get("OrderMerchantReference") as string;
+  const orderNotificationType = searchParams.get(
+    "OrderNotificationType"
+  ) as string;
+  const orderMerchantReference = searchParams.get(
+    "OrderMerchantReference"
+  ) as string;
 
   if (!paymentInstance) {
-    return res.status(500).send({ success: false, err: "internal server error" });
+    return res
+      .status(500)
+      .send({ success: false, err: "internal server error" });
   }
 
   const response = await paymentInstance.getTransactionStatus(orderTrackingId);

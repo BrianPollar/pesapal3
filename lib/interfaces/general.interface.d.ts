@@ -239,4 +239,7 @@ export interface IgetTransactionStatusRes {
     status?: string;
     err?: any;
 }
+/**
+ * Defines the type of notification method, either 'GET' or 'POST'.
+ */
 export type TnotificationMethodType = 'GET' | 'POST';
