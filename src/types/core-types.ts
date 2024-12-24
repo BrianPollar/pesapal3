@@ -151,12 +151,13 @@ export interface IendpointResponse {
   payment_status_code: string;
   currency: string;
   error: {
-    error_type: string;
-    code: string;
-    message: string;
-    call_back_url: string;
+    error_type: null;
+    code: null;
+    message: null;
+    call_back_url: null;
   };
   status: string;
+
 }
 
 /**

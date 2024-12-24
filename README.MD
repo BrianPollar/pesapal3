@@ -1,33 +1,35 @@
 # pesapal3
 
-A robust and feature-rich Node.js implementation of the PesaPal payment gateway API. This library simplifies the integration of PesaPal payment services into your Node.js applications, providing a secure and reliable payment solution.
+A Node.js library for integrating PesaPal payment services into your applications.
 
-## Features
+## PesaPal API Integration
 
-pesapal3 offers a comprehensive set of features for seamless PesaPal integration:
+This project connects to the PesaPal API to handle payments. Here’s what it does:
 
-#### Reliability
+- **Get Tokens**: Retrieves tokens needed to make secure API requests.
+- **Handle Payments**: Listens for payment notifications from PesaPal (IPN).
 
-- Establishes secure connections even in the presence of proxies, load balancers, personal firewalls, and antivirus software.
-- Handles network disruptions and retries failed requests automatically.
+## Key Dependencies
 
-#### Minimalistic Implementation
+The project relies on several important packages:
 
-- Abstracts away the complexities of the PesaPal API, allowing you to focus on your application logic.
-- No need to understand the internal structures and operations of the PesaPal systems.
+- **For Production**:
+  - `axios`: Used to send HTTP requests.
+  - `axios-mock-adapter`: Helps in testing by mocking requests.
+  - `log4js`: Used for logging messages.
+  - `tracer`: Assists with debugging.
+- **For Development**:
+  - ESLint plugins for maintaining code quality.
+  - TypeScript for adding type safety.
+  - Testing tools like `supertest` and `vitest`.
 
-#### Simple and Intuitive API
+## Logging
 
-- Clean and well-documented API for easy integration.
-- Supports both TypeScript and JavaScript.
-- Provides clear error handling and detailed response messages.
+The application logs important information using `log4js`. You can find these logs in the `pesapal.log` file, which helps in debugging issues.
 
-#### Comprehensive Functionality
+## IPN Notifications
 
-- Supports various payment scenarios: one-time payments, recurring subscriptions, and refunds.
-- Handles IPN (Instant Payment Notification) callbacks for real-time payment updates.
-- Allows customization of IPN endpoints and notification methods.
-- Retrieves transaction statuses and detailed payment information.
+Make sure to set up your IPN URL in your PesaPal account settings so that the application can receive payment notifications.
 
 ## Installation
 
@@ -39,12 +41,9 @@ yarn add pesapal3
 
 ## Usage
 
-The following example demonstrates how to initialize pesapal3, submit an order, and handle IPN callbacks:
-
 ```ts
-import { Pesapal, Iconfig, IpayDetails } from "pesapal3";
+import { initialisePesapal, Iconfig, IpayDetails } from "pesapal3";
 
-// Configure PesaPal credentials and URLs
 const config: Iconfig = {
   pesapalEnvironment: "live", // or "sandbox"
   pesapalConsumerKey: "your-consumer-key",
@@ -52,14 +51,11 @@ const config: Iconfig = {
   pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
 };
 
-// Initialize PesaPal instance
-const pesapal = new Pesapal(config);
-const paymentInstance = pesapal.run();
+const paymentInstance = initialisePesapal(config);
 
-// Submit an order
 const details: IpayDetails = {
   amount: 1000,
-  currency: "UGX",
+  currency: "USD",
   description: "This is a test payment",
   // ...other_details
 };
@@ -71,10 +67,8 @@ const ordered = await paymentInstance.submitOrder(
 );
 
 if (ordered.success) {
-  // The make payment request was successful.
   console.log(ordered.response);
 } else {
-  // The make payment request failed.
   console.error(ordered.error);
 }
 
@@ -104,11 +98,7 @@ paymentRoutes.get("/ipn", async (req, res) => {
 
 ## Documentation
 
-The complete documentation for pesapal3, including detailed API references, usage examples, and advanced features, is available on [GitHub](https://github.com/BrianPollar/pesapal3). Contributions are welcome!
-
-## Sponsors
-
-Become a sponsor and get your logo on our README on GitHub with a link to your site.
+Complete documentation is available on [GitHub](https://github.com/BrianPollar/pesapal3).
 
 ## License
 
