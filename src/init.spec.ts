@@ -25,10 +25,10 @@ describe('Pesapal', () => {
 
   beforeEach(() => {
     config = {
-      pesapalEnvironment: 'sandbox',
-      pesapalConsumerKey: 'TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev',
-      pesapalConsumerSecret: '1KpqkfsMaihIcOlhnBo/gBZ5smw=',
-      pesapalIpnUrl: 'http://localhost:4000/payment'
+      PESAPAL_ENVIRONMENT: 'sandbox',
+      PESAPAL_CONSUMER_KEY: 'TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev',
+      PESAPAL_CONSUMER_SECRET: '1KpqkfsMaihIcOlhnBo/gBZ5smw=',
+      PESAPAL_IPN_URL: 'http://localhost:4000/payment'
     };
   });
 

@@ -21,22 +21,22 @@ export interface Iconfig {
    *
    * Can be either `sandbox` or `live`.
    */
-  pesapalEnvironment: 'sandbox' | 'live';
+  PESAPAL_ENVIRONMENT: 'sandbox' | 'live';
 
   /**
    * The consumer key for PesaPal.
    */
-  pesapalConsumerKey: string;
+  PESAPAL_CONSUMER_KEY: string;
 
   /**
    * The consumer secret for PesaPal.
    */
-  pesapalConsumerSecret: string;
+  PESAPAL_CONSUMER_SECRET: string;
 
   /**
    * The IPN URL for PesaPal.
    */
-  pesapalIpnUrl: string;
+  PESAPAL_IPN_URL: string;
 }
 
 

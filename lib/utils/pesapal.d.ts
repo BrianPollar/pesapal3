@@ -38,7 +38,7 @@ export declare const createMockPayDetails: (ipnUrl: string, phone: string) => {
         zip_code: string;
     };
 };
-export declare const stringifyIfObj: (val: any) => string;
+export declare const stringifyIfObj: <T>(val: T) => string;
 /**
  * This class is a controller for PesaPal payments.
  * The `token` property is the PesaPal token.

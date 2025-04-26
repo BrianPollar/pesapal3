@@ -73,17 +73,8 @@ export const createMockPayDetails = (ipnUrl: string, phone: string) => ({
   }
 });
 
-export const stringifyIfObj = (val) => {
-  let valStr: string;
-
-  if (typeof val === 'string') {
-    valStr = val;
-  } else {
-    valStr = JSON.stringify(val);
-  }
-
-  return valStr;
-};
+export const stringifyIfObj = <T>(val: T): string =>
+  (typeof val === 'string' ? val : JSON.stringify(val));
 
 /**
  * This class is a controller for PesaPal payments.
@@ -108,7 +99,7 @@ export class Pesapal {
   token: IpesaPalToken;
 
   constructor(public config: Iconfig) {
-    if (config.pesapalEnvironment === 'live') {
+    if (config.PESAPAL_ENVIRONMENT === 'live') {
       this.pesapalUrl = 'https://pay.pesapal.com/v3';
     } else {
       this.pesapalUrl = 'https://cybqa.pesapal.com/pesapalv3';
@@ -149,7 +140,7 @@ export class Pesapal {
       return new Promise((resolve, reject) => reject(new Error('couldnt resolve getting token')));
     }
 
-    const ipnUrl = ipn || this.config.pesapalIpnUrl;
+    const ipnUrl = ipn || this.config.PESAPAL_IPN_URL;
     const ipnNotificationType = notificationMethodType || 'GET';
 
     const parameters = {
@@ -255,47 +246,83 @@ export class Pesapal {
     productId: string,
     description: string
   ): Promise<IsubmitOrderRes> {
-    logger.info('details are', paymentDetails);
-    const gotToken = await this.relegateTokenStatus().catch(err => err);
-
-    if (gotToken instanceof Error) {
-      return new Promise((resolve, reject) => reject(gotToken));
+    // Input validation
+    if (!paymentDetails) {
+      throw new Error('Payment details are required');
+    }
+    if (!productId) {
+      throw new Error('Product ID is required');
+    }
+    if (!description) {
+      throw new Error('Description is required');
     }
 
-    const headers = {
-      ...this.defaultHeaders,
-      Authorization: 'Bearer  ' + this.token.token
-    };
-
-    logger.debug('IPNS ARE', this.ipns);
-    const notifId = this.ipns[0].ipn_id;
-
-    return new Promise((resolve, reject) => {
-      axios
-        .post(
-          this.pesapalUrl +
-        '/api/Transactions/SubmitOrderRequest',
-          this.constructParamsFromObj(paymentDetails, notifId, productId, description),
-          { headers }
-        )
-        .then(res => {
-          const response = res.data as IorderResponse;
-
-          if (response.error) {
-            logger.error('PesaPalController, submitOrder error', response.error);
-            if (typeof response.error === 'string') {
-              reject(new Error(response.error));
-            } else {
-              reject(new PesaPalError(response.error));
-            }
-          } else {
-            resolve({ success: true, status: 200, pesaPalOrderRes: response });
-          }
-        }).catch((err) => {
-          logger.error('PesaPalController, submitOrder err', err);
-          reject(new Error(stringifyIfObj(err)));
-        });
+    // Sanitized logging
+    logger.info('Submitting order', {
+      transactionType: 'order_submission'
     });
+
+    try {
+      // Ensure token is valid
+      await this.relegateTokenStatus();
+
+      // Safely get notification ID
+      if (!this.ipns || this.ipns.length === 0) {
+        throw new Error('No IPN endpoints available');
+      }
+      const notifId = this.ipns[0].ipn_id;
+
+      // Prepare headers with trimmed Bearer token
+      const headers = {
+        ...this.defaultHeaders,
+        Authorization: `Bearer ${this.token.token.trim()}`
+      };
+
+      // Make API call
+      const response = await axios.post(
+        `${this.pesapalUrl}/api/Transactions/SubmitOrderRequest`,
+        this.constructParamsFromObj(paymentDetails, notifId, productId, description),
+        { headers }
+      );
+
+      // Handle response
+      const orderResponse = response.data as IorderResponse;
+
+      // Robust error handling
+      if (orderResponse.error) {
+        const errorDetails =
+          typeof orderResponse.error === 'string' ?
+            { message: orderResponse.error } :
+            orderResponse.error || { message: 'Unknown error' };
+
+        logger.error('Order submission failed', {
+          errorType: 'api_response_error',
+          errorMessage: errorDetails.message
+        });
+
+        throw new Error(errorDetails.message);
+      }
+
+      logger.info('Order submitted successfully', {
+        transactionType: 'order_submission_complete'
+      });
+
+      return {
+        success: true,
+        status: response.status,
+        pesaPalOrderRes: orderResponse
+      };
+    } catch (err) {
+      logger.error('Order submission error', {
+        errorType: 'submission_error',
+        errorMessage: err instanceof Error ? err.message : 'Unknown error'
+      });
+
+      // Rethrow the original error or create a new one
+      throw err instanceof Error ?
+        err :
+        new Error('Unexpected error during order submission');
+    }
   }
 
   /**
@@ -397,8 +424,8 @@ export class Pesapal {
       ...this.defaultHeaders
     };
     const parameters = {
-      consumer_key: this.config.pesapalConsumerKey,
-      consumer_secret: this.config.pesapalConsumerSecret
+      consumer_key: this.config.PESAPAL_CONSUMER_KEY,
+      consumer_secret: this.config.PESAPAL_CONSUMER_SECRET
     };
 
     return new Promise((resolve, reject) => {

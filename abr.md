@@ -27,10 +27,10 @@ Sample code:
 import { Pesapal, Iconfig } from "pesapal3";
 
 const config: Iconfig = {
-  pesapalEnvironment: "live", // or sandbox
-  pesapalConsumerKey: "your-consumer-key",
-  pesapalConsumerSecret: "your-consumer-secret",
-  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  PESAPAL_ENVIRONMENT: "live", // or sandbox
+  PESAPAL_CONSUMER_KEY: "your-consumer-key",
+  PESAPAL_CONSUMER_SECRET: "your-consumer-secret",
+  PESAPAL_IPN_URL: "https://yourserverdomain/pesapal/ipn",
 };
 
 const pesapal = new Pesapal(config);
@@ -77,10 +77,10 @@ The following example inits pesapal3 and gets the chat client and chat controlle
 import { Pesapal, Iconfig, IpayDetails } from "pesapal3";
 
 const config: Iconfig = {
-  pesapalEnvironment: "live", // or sandbox
-  pesapalConsumerKey: "your-consumer-key",
-  pesapalConsumerSecret: "your-consumer-secret",
-  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  PESAPAL_ENVIRONMENT: "live", // or sandbox
+  PESAPAL_CONSUMER_KEY: "your-consumer-key",
+  PESAPAL_CONSUMER_SECRET: "your-consumer-secret",
+  PESAPAL_IPN_URL: "https://yourserverdomain/pesapal/ipn",
 };
 
 const pesapal = new Pesapal(config);
@@ -151,10 +151,10 @@ paymentRoutes.get("/ipn", async (req, res) => {
 ```ts
 import { PesaPalController, IrefundRequestReq } from "pesapal3";
 const config: Iconfig = {
-  pesapalEnvironment: "live", // or sandbox
-  pesapalConsumerKey: "your-consumer-key",
-  pesapalConsumerSecret: "your-consumer-secret",
-  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  PESAPAL_ENVIRONMENT: "live", // or sandbox
+  PESAPAL_CONSUMER_KEY: "your-consumer-key",
+  PESAPAL_CONSUMER_SECRET: "your-consumer-secret",
+  PESAPAL_IPN_URL: "https://yourserverdomain/pesapal/ipn",
 };
 
 const pesapal = new Pesapal(config);
@@ -179,10 +179,10 @@ If you want to get all the registered Ipn end point you would use the getIpnEndP
 ```ts
 import { PesaPalController, IrefundRequestReq } from "pesapal3";
 const config: Iconfig = {
-  pesapalEnvironment: "live", // or sandbox
-  pesapalConsumerKey: "your-consumer-key",
-  pesapalConsumerSecret: "your-consumer-secret",
-  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  PESAPAL_ENVIRONMENT: "live", // or sandbox
+  PESAPAL_CONSUMER_KEY: "your-consumer-key",
+  PESAPAL_CONSUMER_SECRET: "your-consumer-secret",
+  PESAPAL_IPN_URL: "https://yourserverdomain/pesapal/ipn",
 };
 
 const pesapal = new Pesapal(config);
@@ -198,10 +198,10 @@ const response = await paymentInstance.getIpnEndPoints();
 ```ts
 import { PesaPalController, IrefundRequestReq } from "pesapal3";
 const config: Iconfig = {
-  pesapalEnvironment: "live", // or sandbox
-  pesapalConsumerKey: "your-consumer-key",
-  pesapalConsumerSecret: "your-consumer-secret",
-  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  PESAPAL_ENVIRONMENT: "live", // or sandbox
+  PESAPAL_CONSUMER_KEY: "your-consumer-key",
+  PESAPAL_CONSUMER_SECRET: "your-consumer-secret",
+  PESAPAL_IPN_URL: "https://yourserverdomain/pesapal/ipn",
 };
 
 const pesapal = new Pesapal(config);
@@ -226,10 +226,10 @@ you would use the api below
 ```ts
 import { PesaPalController, IrefundRequestReq } from 'pesapal3'
 const config: Iconfig = {
-  pesapalEnvironment: "live", // or sandbox
-  pesapalConsumerKey: "your-consumer-key",
-  pesapalConsumerSecret: "your-consumer-secret",
-  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn"
+  PESAPAL_ENVIRONMENT: "live", // or sandbox
+  PESAPAL_CONSUMER_KEY: "your-consumer-key",
+  PESAPAL_CONSUMER_SECRET: "your-consumer-secret",
+  PESAPAL_IPN_URL: "https://yourserverdomain/pesapal/ipn"
 };
 
 const pesapal = new Pesapal(config);

@@ -1,6 +1,7 @@
 # pesapal3
 
 A Node.js library for integrating PesaPal payment services into your applications.
+It provides a comprehensive, type-safe interface for payment-related operations
 
 ## PesaPal API Integration
 
@@ -45,10 +46,10 @@ yarn add pesapal3
 import { initialisePesapal, Iconfig, IpayDetails } from "pesapal3";
 
 const config: Iconfig = {
-  pesapalEnvironment: "live", // or "sandbox"
-  pesapalConsumerKey: "your-consumer-key",
-  pesapalConsumerSecret: "your-consumer-secret",
-  pesapalIpnUrl: "https://yourserverdomain/pesapal/ipn",
+  PESAPAL_ENVIRONMENT: "live", // or "sandbox"
+  PESAPAL_CONSUMER_KEY: "your-consumer-key",
+  PESAPAL_CONSUMER_SECRET: "your-consumer-secret",
+  PESAPAL_IPN_URL: "https://yourserverdomain/pesapal/ipn",
 };
 
 const paymentInstance = initialisePesapal(config);

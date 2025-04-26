@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-undefined */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { faker } from '@faker-js/faker';
@@ -6,12 +8,12 @@ import MockAdapter from 'axios-mock-adapter';
 import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { Iconfig } from '../init';
 import {
-  IpayDetails,
-  IpesaPalError,
-  IpesaPalToken,
-  IrefundRequestReq
+    IpayDetails,
+    IpesaPalError,
+    IpesaPalToken,
+    IrefundRequestReq
 } from '../types/core-types';
-import { createMockPayDetails, Pesapal } from './pesapal';
+import { createMockPayDetails, Pesapal, stringifyIfObj } from './pesapal';
 
 const pesapalInstHoisted = vi.hoisted(() => ({
   logger: {
@@ -73,10 +75,10 @@ describe('Payment', () => {
 
   beforeEach(() => {
     const config: Iconfig = {
-      pesapalEnvironment: 'sandbox',
-      pesapalConsumerKey: 'TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev',
-      pesapalConsumerSecret: '1KpqkfsMaihIcOlhnBo/gBZ5smw=',
-      pesapalIpnUrl: 'http://localhost:4000/payment'
+      PESAPAL_ENVIRONMENT: 'sandbox',
+      PESAPAL_CONSUMER_KEY: 'TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev',
+      PESAPAL_CONSUMER_SECRET: '1KpqkfsMaihIcOlhnBo/gBZ5smw=',
+      PESAPAL_IPN_URL: 'http://localhost:4000/payment'
     };
 
     instance = new Pesapal(config);
@@ -413,5 +415,81 @@ describe('Payment', () => {
       expect(res).toHaveProperty('success');
       expect(res).toEqual({ success: true, refundRequestRes });
     });
+  });
+});
+
+describe('Utility Functions', () => {
+  describe('stringifyIfObj', () => {
+    it('should return string as-is when input is a string', () => {
+      const input = 'test string';
+
+      expect(stringifyIfObj(input)).toBe(input);
+    });
+
+    it('should stringify object correctly', () => {
+      const input = { key: 'value', num: 42 };
+
+      expect(stringifyIfObj(input)).toBe(JSON.stringify(input));
+    });
+
+    it('should stringify array correctly', () => {
+      const input = [1, 2, 3];
+
+      expect(stringifyIfObj(input)).toBe(JSON.stringify(input));
+    });
+
+    it('should handle null and undefined', () => {
+      expect(stringifyIfObj(null)).toBe('null');
+      expect(stringifyIfObj(undefined)).toBeUndefined();
+    });
+  });
+
+  describe('createMockPayDetails', () => {
+    const mockIpnUrl = 'http://test-ipn-url.com';
+    const mockPhone = '+256123456789';
+
+    it('should generate mock pay details with correct structure', () => {
+      const mockDetails = createMockPayDetails(mockIpnUrl, mockPhone);
+
+      expect(mockDetails).toHaveProperty('id');
+      expect(mockDetails).toHaveProperty('currency', 'UGX');
+      expect(mockDetails).toHaveProperty('amount', 1000);
+      expect(mockDetails).toHaveProperty('callback_url', 'http://localhost:4000');
+      expect(mockDetails).toHaveProperty('notification_id', mockIpnUrl);
+
+      expect(mockDetails.billing_address).toBeDefined();
+      expect(mockDetails.billing_address.phone_number).toBe(mockPhone);
+    });
+
+    it('should generate unique mock details on each call', () => {
+      const details1 = createMockPayDetails(mockIpnUrl, mockPhone);
+      const details2 = createMockPayDetails(mockIpnUrl, mockPhone);
+
+      expect(details1.id).not.toBe(details2.id);
+    });
+  });
+});
+
+describe('Pesapal Configuration', () => {
+  it('should set correct pesapal URL based on environment', () => {
+    const liveConfig: Iconfig = {
+      PESAPAL_ENVIRONMENT: 'live',
+      PESAPAL_CONSUMER_KEY: 'test-key',
+      PESAPAL_CONSUMER_SECRET: 'test-secret',
+      PESAPAL_IPN_URL: 'http://live-ipn.com'
+    };
+
+    const sandboxConfig: Iconfig = {
+      PESAPAL_ENVIRONMENT: 'sandbox',
+      PESAPAL_CONSUMER_KEY: 'test-key',
+      PESAPAL_CONSUMER_SECRET: 'test-secret',
+      PESAPAL_IPN_URL: 'http://sandbox-ipn.com'
+    };
+
+    const liveInstance = new Pesapal(liveConfig);
+    const sandboxInstance = new Pesapal(sandboxConfig);
+
+    expect(liveInstance.pesapalUrl).toBe('https://pay.pesapal.com/v3');
+    expect(sandboxInstance.pesapalUrl).toBe('https://cybqa.pesapal.com/pesapalv3');
   });
 });

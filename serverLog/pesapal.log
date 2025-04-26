@@ -22353,3 +22353,756 @@
   message: 'message'
 } (in pesapal.controller.ts:415)
 00:01:24.02 [debug] response data from getToken() null (in pesapal.controller.ts:415)
+08:28:29.21 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.23 [debug] response data from getToken() {
+  token: null,
+  expiryDate: 'Thu Dec 26 2024 08:28:29 GMT+0300 (East Africa Time)',
+  error: { type: 'error', code: '500', message: 'some error' },
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.24 [error] PesaPalController, getToken err AxiosError: Network Error
+    at Function.AxiosError.from (/Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at Object.createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:29)
+    at Array.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:145:29)
+    ... 4 lines matching cause stack trace ...
+    at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10) {
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: AxiosHeaders {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer OtMFevqVxeU'
+    },
+    method: 'post',
+    url: 'https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken',
+    data: '{"consumer_key":"TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev","consumer_secret":"1KpqkfsMaihIcOlhnBo/gBZ5smw="}'
+  },
+  cause: Error: Network Error
+      at Object.createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:34)
+      at Array.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:145:29)
+      at handleRequest (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/handle_request.js:100:30)
+      at /Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:23:7
+      at new Promise (<anonymous>)
+      at MockAdapter.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:22:12)
+      at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10)
+} (in pesapal.ts:465)
+08:28:29.26 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.27 [debug] constructParamsFromObj, constructedObj {
+  id: '75a743df-1605-4e16-8726-516be014b176',
+  currency: 'UG',
+  amount: 100,
+  description: 'm',
+  callback_url: 'url',
+  notification_id: 'fa0861ea-ab28-42c4-9ffb-6c2e58fa1542',
+  billing_address: {
+    email_address: 'Caitlyn.McGlynn@hotmail.com',
+    phone_number: '2409313846951936',
+    country_code: 'UG',
+    first_name: 'Edmond.Bahringer',
+    middle_name: 'Jailyn62',
+    last_name: 'Margie75',
+    line_1: 'w',
+    line_2: 'q',
+    city: 'd',
+    state: 's',
+    zip_code: '2305891755884544'
+  }
+} (in pesapal.ts:586)
+08:28:29.28 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.28 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.28 [debug] PesaPalController, getIpnEndPoints response [
+  {
+    url: 'http://localhost:4000',
+    created_date: 'Thu Dec 26 2024 08:28:29 GMT+0300 (East Africa Time)',
+    ipn_id: 'c469c2c2-f2ff-4f06-8470-cf7217c886d4',
+    error: null,
+    status: '200'
+  }
+] (in pesapal.ts:213)
+08:28:29.29 [info] Submitting order { transactionType: 'order_submission' } (in pesapal.ts:261)
+08:28:29.29 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.29 [debug] constructParamsFromObj, constructedObj {
+  id: '2bd08e1e-9ccb-4d6b-9da7-fe569ee9b538',
+  currency: 'UGX',
+  amount: 1000,
+  description: 'R',
+  callback_url: 'http://localhost:4000',
+  notification_id: 'd1dab773-857c-457c-9a05-eee4bbf78aaa',
+  billing_address: {
+    email_address: 'Jennings_Schmidt18@gmail.com',
+    phone_number: '0756920841',
+    country_code: 'UG',
+    first_name: 'Hermina36',
+    middle_name: 'Opal49',
+    last_name: 'Reese.Senger',
+    line_1: 'G',
+    line_2: 'R',
+    city: 'Kampala',
+    state: 'Uganda',
+    zip_code: '0000'
+  }
+} (in pesapal.ts:586)
+08:28:29.29 [info] Order submitted successfully { transactionType: 'order_submission_complete' } (in pesapal.ts:306)
+08:28:29.29 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.30 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.30 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.30 [error] PesaPalController, submitOrder err AxiosError: Request failed with status code 401
+    at Function.AxiosError.from (/Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:29)
+    at Object.settle (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:127:7)
+    ... 4 lines matching cause stack trace ...
+    at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10) {
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: AxiosHeaders {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer OtMFevqVxeU'
+    },
+    method: 'post',
+    url: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt',
+    data: '{"confirmation_code":"string","amount":"string","username":"string","remarks":"string"}'
+  },
+  response: {
+    status: 401,
+    data: {},
+    headers: AxiosHeaders {},
+    config: {
+      transitional: [Object],
+      transformRequest: [Array],
+      transformResponse: [Array],
+      timeout: 0,
+      xsrfCookieName: 'XSRF-TOKEN',
+      xsrfHeaderName: 'X-XSRF-TOKEN',
+      maxContentLength: -1,
+      maxBodyLength: -1,
+      env: [Object],
+      validateStatus: [Function: validateStatus],
+      headers: [AxiosHeaders],
+      method: 'post',
+      url: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt',
+      data: '{"confirmation_code":"string","amount":"string","username":"string","remarks":"string"}'
+    },
+    request: {
+      responseURL: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt'
+    }
+  },
+  cause: Error: Request failed with status code 401
+      at createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:34)
+      at Object.settle (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:127:7)
+      at handleRequest (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/handle_request.js:93:13)
+      at /Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:23:7
+      at new Promise (<anonymous>)
+      at MockAdapter.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:22:12)
+      at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10)
+} (in pesapal.ts:409)
+08:28:29.30 [debug] response data from getToken() null (in pesapal.ts:442)
+08:28:29.31 [error] PesaPalController, unknown err sorry but unknwn (in pesapal.ts:458)
+08:28:29.31 [debug] response data from getToken() {
+  token: 'OtMFevqVxeU',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:28:29.23 [error] PesaPalController, unknown err sorry but unknwn (in pesapal.ts:458)
+08:28:29.23 [error] PesaPalController, unknown err some error (in pesapal.ts:445)
+08:28:29.23 [debug] response data from getToken() {} (in pesapal.ts:442)
+08:36:17.09 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.13 [error] PesaPalController, unknown err sorry but unknwn (in pesapal.ts:458)
+08:36:17.13 [error] PesaPalController, getToken err AxiosError: Network Error
+    at Function.AxiosError.from (/Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at Object.createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:29)
+    at Array.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:145:29)
+    ... 4 lines matching cause stack trace ...
+    at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10) {
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: AxiosHeaders {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer cC1ugPTHquC'
+    },
+    method: 'post',
+    url: 'https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken',
+    data: '{"consumer_key":"TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev","consumer_secret":"1KpqkfsMaihIcOlhnBo/gBZ5smw="}'
+  },
+  cause: Error: Network Error
+      at Object.createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:34)
+      at Array.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:145:29)
+      at handleRequest (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/handle_request.js:100:30)
+      at /Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:23:7
+      at new Promise (<anonymous>)
+      at MockAdapter.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:22:12)
+      at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10)
+} (in pesapal.ts:465)
+08:36:17.18 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.23 [debug] constructParamsFromObj, constructedObj {
+  id: '055440fd-d9d3-4ac3-a74a-414db2cf572b',
+  currency: 'UG',
+  amount: 100,
+  description: 'x',
+  callback_url: 'url',
+  notification_id: '42e74ef6-3222-435f-8426-4202508fa325',
+  billing_address: {
+    email_address: 'Cicero.Brakus18@gmail.com',
+    phone_number: '2487866726809600',
+    country_code: 'UG',
+    first_name: 'Rex.Dickens78',
+    middle_name: 'Brandyn53',
+    last_name: 'Wilson2',
+    line_1: 'I',
+    line_2: 'v',
+    city: 'm',
+    state: '9',
+    zip_code: '781898483761152'
+  }
+} (in pesapal.ts:586)
+08:36:17.24 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.25 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.26 [debug] PesaPalController, getIpnEndPoints response [
+  {
+    url: 'http://localhost:4000',
+    created_date: 'Thu Dec 26 2024 08:36:17 GMT+0300 (East Africa Time)',
+    ipn_id: '00c3cde2-2179-4a0b-a5ab-fd4ecae3f47d',
+    error: null,
+    status: '200'
+  }
+] (in pesapal.ts:213)
+08:36:17.27 [info] Submitting order { transactionType: 'order_submission' } (in pesapal.ts:261)
+08:36:17.28 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.28 [debug] constructParamsFromObj, constructedObj {
+  id: '02c17b6e-5fbd-4ce5-b429-582b359d0dc7',
+  currency: 'UGX',
+  amount: 1000,
+  description: 'Y',
+  callback_url: 'http://localhost:4000',
+  notification_id: 'a8548b82-01a8-4e3d-90ce-33c90b4df944',
+  billing_address: {
+    email_address: 'Carolyn_Kuhn1@hotmail.com',
+    phone_number: '0756920841',
+    country_code: 'UG',
+    first_name: 'Marcellus_Schiller87',
+    middle_name: 'Shirley.Gutmann',
+    last_name: 'Devyn.Wiegand-Parker13',
+    line_1: 'N',
+    line_2: 'W',
+    city: 'Kampala',
+    state: 'Uganda',
+    zip_code: '0000'
+  }
+} (in pesapal.ts:586)
+08:36:17.29 [info] Order submitted successfully { transactionType: 'order_submission_complete' } (in pesapal.ts:306)
+08:36:17.30 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.31 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.32 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.32 [error] PesaPalController, submitOrder err AxiosError: Request failed with status code 401
+    at Function.AxiosError.from (/Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:29)
+    at Object.settle (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:127:7)
+    ... 4 lines matching cause stack trace ...
+    at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10) {
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: AxiosHeaders {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer cC1ugPTHquC'
+    },
+    method: 'post',
+    url: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt',
+    data: '{"confirmation_code":"string","amount":"string","username":"string","remarks":"string"}'
+  },
+  response: {
+    status: 401,
+    data: {},
+    headers: AxiosHeaders {},
+    config: {
+      transitional: [Object],
+      transformRequest: [Array],
+      transformResponse: [Array],
+      timeout: 0,
+      xsrfCookieName: 'XSRF-TOKEN',
+      xsrfHeaderName: 'X-XSRF-TOKEN',
+      maxContentLength: -1,
+      maxBodyLength: -1,
+      env: [Object],
+      validateStatus: [Function: validateStatus],
+      headers: [AxiosHeaders],
+      method: 'post',
+      url: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt',
+      data: '{"confirmation_code":"string","amount":"string","username":"string","remarks":"string"}'
+    },
+    request: {
+      responseURL: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt'
+    }
+  },
+  cause: Error: Request failed with status code 401
+      at createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:34)
+      at Object.settle (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:127:7)
+      at handleRequest (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/handle_request.js:93:13)
+      at /Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:23:7
+      at new Promise (<anonymous>)
+      at MockAdapter.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:22:12)
+      at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10)
+} (in pesapal.ts:409)
+08:36:17.33 [debug] response data from getToken() null (in pesapal.ts:442)
+08:36:17.33 [error] PesaPalController, unknown err sorry but unknwn (in pesapal.ts:458)
+08:36:17.33 [debug] response data from getToken() {
+  token: 'cC1ugPTHquC',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.11 [debug] response data from getToken() {
+  token: null,
+  expiryDate: 'Thu Dec 26 2024 08:36:17 GMT+0300 (East Africa Time)',
+  error: { type: 'error', code: '500', message: 'some error' },
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:36:17.11 [error] PesaPalController, unknown err some error (in pesapal.ts:445)
+08:36:17.12 [debug] response data from getToken() {} (in pesapal.ts:442)
+08:47:17.92 [debug] response data from getToken() {
+  token: 'tw186jV1LOf',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:47:17.94 [debug] response data from getToken() {
+  token: null,
+  expiryDate: 'Thu Dec 26 2024 08:47:17 GMT+0300 (East Africa Time)',
+  error: { type: 'error', code: '500', message: 'some error' },
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:47:17.94 [error] PesaPalController, unknown err sorry but unknwn (in pesapal.ts:458)
+08:47:17.95 [error] PesaPalController, getToken err AxiosError: Network Error
+    at Function.AxiosError.from (/Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at Object.createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:29)
+    at Array.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:145:29)
+    ... 4 lines matching cause stack trace ...
+    at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10) {
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: AxiosHeaders {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer tw186jV1LOf'
+    },
+    method: 'post',
+    url: 'https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken',
+    data: '{"consumer_key":"TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev","consumer_secret":"1KpqkfsMaihIcOlhnBo/gBZ5smw="}'
+  },
+  cause: Error: Network Error
+      at Object.createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:34)
+      at Array.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:145:29)
+      at handleRequest (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/handle_request.js:100:30)
+      at /Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:23:7
+      at new Promise (<anonymous>)
+      at MockAdapter.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:22:12)
+      at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10)
+} (in pesapal.ts:465)
+08:47:17.94 [error] PesaPalController, unknown err some error (in pesapal.ts:445)
+08:47:17.94 [debug] response data from getToken() {} (in pesapal.ts:442)
+08:47:18.00 [debug] response data from getToken() {
+  token: 'tw186jV1LOf',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:17.94 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:17.95 [debug] response data from getToken() {
+  token: null,
+  expiryDate: 'Thu Dec 26 2024 08:48:17 GMT+0300 (East Africa Time)',
+  error: { type: 'error', code: '500', message: 'some error' },
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:17.96 [error] PesaPalController, unknown err some error (in pesapal.ts:445)
+08:48:17.96 [debug] response data from getToken() {} (in pesapal.ts:442)
+08:48:17.96 [error] PesaPalController, getToken err AxiosError: Network Error
+    at Function.AxiosError.from (/Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at Object.createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:29)
+    at Array.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:145:29)
+    ... 4 lines matching cause stack trace ...
+    at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10) {
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: AxiosHeaders {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer sQ1C96JCyFq'
+    },
+    method: 'post',
+    url: 'https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken',
+    data: '{"consumer_key":"TDpigBOOhs+zAl8cwH2Fl82jJGyD8xev","consumer_secret":"1KpqkfsMaihIcOlhnBo/gBZ5smw="}'
+  },
+  cause: Error: Network Error
+      at Object.createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:34)
+      at Array.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:145:29)
+      at handleRequest (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/handle_request.js:100:30)
+      at /Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:23:7
+      at new Promise (<anonymous>)
+      at MockAdapter.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:22:12)
+      at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10)
+} (in pesapal.ts:465)
+08:48:18.01 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:18.01 [debug] constructParamsFromObj, constructedObj {
+  id: '32ee7fcc-c4b9-4f4a-90e1-5301e05a31ec',
+  currency: 'UG',
+  amount: 100,
+  description: 'J',
+  callback_url: 'url',
+  notification_id: '0d86c2c4-3355-4a52-8efa-21b9c1ca0fd2',
+  billing_address: {
+    email_address: 'Noelia.OKon@yahoo.com',
+    phone_number: '7991525434720256',
+    country_code: 'UG',
+    first_name: 'Dax.Kulas',
+    middle_name: 'Gertrude_Lockman',
+    last_name: 'Ryley24',
+    line_1: 'e',
+    line_2: 'Z',
+    city: 'v',
+    state: 't',
+    zip_code: '4718389712912384'
+  }
+} (in pesapal.ts:586)
+08:48:18.02 [debug] PesaPalController, getIpnEndPoints response [
+  {
+    url: 'http://localhost:4000',
+    created_date: 'Thu Dec 26 2024 08:48:18 GMT+0300 (East Africa Time)',
+    ipn_id: '63acd910-b714-4175-a23d-87cdbb5ee52e',
+    error: null,
+    status: '200'
+  }
+] (in pesapal.ts:213)
+08:48:18.03 [info] Submitting order { transactionType: 'order_submission' } (in pesapal.ts:261)
+08:48:18.03 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:18.03 [debug] constructParamsFromObj, constructedObj {
+  id: '0f852895-f96c-4771-86df-7699a38f6a2d',
+  currency: 'UGX',
+  amount: 1000,
+  description: 'B',
+  callback_url: 'http://localhost:4000',
+  notification_id: 'dcf02186-b21f-4b98-85a5-8ac9e7e91e7a',
+  billing_address: {
+    email_address: 'Heidi_Balistreri@yahoo.com',
+    phone_number: '0756920841',
+    country_code: 'UG',
+    first_name: 'Shaun_Bayer99',
+    middle_name: 'Ismael_Beier',
+    last_name: 'Vita_Kuhn',
+    line_1: 'O',
+    line_2: 'H',
+    city: 'Kampala',
+    state: 'Uganda',
+    zip_code: '0000'
+  }
+} (in pesapal.ts:586)
+08:48:18.04 [info] Order submitted successfully { transactionType: 'order_submission_complete' } (in pesapal.ts:306)
+08:48:18.04 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:18.04 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:18.05 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:18.05 [error] PesaPalController, submitOrder err AxiosError: Request failed with status code 401
+    at Function.AxiosError.from (/Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:29)
+    at Object.settle (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:127:7)
+    ... 4 lines matching cause stack trace ...
+    at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10) {
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: AxiosHeaders {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer sQ1C96JCyFq'
+    },
+    method: 'post',
+    url: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt',
+    data: '{"confirmation_code":"string","amount":"string","username":"string","remarks":"string"}'
+  },
+  response: {
+    status: 401,
+    data: {},
+    headers: AxiosHeaders {},
+    config: {
+      transitional: [Object],
+      transformRequest: [Array],
+      transformResponse: [Array],
+      timeout: 0,
+      xsrfCookieName: 'XSRF-TOKEN',
+      xsrfHeaderName: 'X-XSRF-TOKEN',
+      maxContentLength: -1,
+      maxBodyLength: -1,
+      env: [Object],
+      validateStatus: [Function: validateStatus],
+      headers: [AxiosHeaders],
+      method: 'post',
+      url: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt',
+      data: '{"confirmation_code":"string","amount":"string","username":"string","remarks":"string"}'
+    },
+    request: {
+      responseURL: 'https://cybqa.pesapal.com/pesapalv3/api/Transactions/RefundRequestt'
+    }
+  },
+  cause: Error: Request failed with status code 401
+      at createAxiosError (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:139:34)
+      at Object.settle (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/utils.js:127:7)
+      at handleRequest (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/handle_request.js:93:13)
+      at /Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:23:7
+      at new Promise (<anonymous>)
+      at MockAdapter.<anonymous> (/Volumes/SS/projects/pesapal3/node_modules/axios-mock-adapter/src/index.js:22:12)
+      at Axios.dispatchRequest (file:///Volumes/SS/projects/pesapal3/node_modules/axios/lib/core/dispatchRequest.js:51:10)
+} (in pesapal.ts:409)
+08:48:18.06 [debug] response data from getToken() null (in pesapal.ts:442)
+08:48:18.06 [error] PesaPalController, unknown err sorry but unknwn (in pesapal.ts:458)
+08:48:18.06 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:18.02 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:18.02 [debug] response data from getToken() {
+  token: 'sQ1C96JCyFq',
+  expiryDate: 'Fri Dec 12 2025 00:00:00 GMT+0300 (East Africa Time)',
+  error: '',
+  status: 'status',
+  message: 'message'
+} (in pesapal.ts:442)
+08:48:17.96 [error] PesaPalController, unknown err sorry but unknwn (in pesapal.ts:458)
